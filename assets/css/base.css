@@ -27,3 +27,6 @@ a {
     src: url('../font/GeosansLight.ttf') format('truetype');  font-display: swap;
 
 }
+ul,li,ol{
+    list-style: none;
+}
