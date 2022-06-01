@@ -68,7 +68,7 @@ useHead({
 }
 
 .mainPage {
-    background: url(/_nuxt/assets/img/mainPage_bg.png);
+    background: url("@/assets/img/mainPage_bg.png");
     background-position: bottom 91% right 56%;
     background-repeat: no-repeat;
     background-size: 190%;
