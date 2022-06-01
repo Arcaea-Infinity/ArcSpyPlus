@@ -11,11 +11,14 @@
                 profiler for Arcaea</h2>
         </header>
         <main class="mainPage-main">
-            <div class="searchBox">
+            <form class="searchBox" action="" @submit.prevent>
                 <img src="@/assets/img/qrCode.webp" class="qrCode" alt="图片加载失败" />
-                <input type="text" v-model="search" id="search" placeholder="Search your ArcID" @change="SearchValue">
-                <img src="@/assets/img/search_icon.webp" class="searchIcon" @click="SearchValue" alt="图片加载失败" />
-            </div>
+                <input type="search" v-model="search" id="search" placeholder="Search your ArcID"
+                    @keyup.enter="SearchValue">
+                <div style="height:100%" class="align-center" @click="SearchValue">
+                    <img src="@/assets/img/search_icon.webp" class="searchIcon" alt="图片加载失败" />
+                </div>
+            </form>
             <aside class="search-leaderBoard-box">
                 <ul class="search-leaderBoard">
                     <li class="search-leader" v-for="item in 19">
@@ -36,11 +39,27 @@
 </template>
 
 <script lang="ts" setup>
-const search = ref<string>("")
+const search = useSearch();
+// refresh();
+// const search = () => useState('')
 
+// const router = useRouter()
 async function SearchValue() {
-    console.log(search.value, '触发搜索')
-    // const result = await useFetch('https://server.awbugl.top/botarcapi/song/info?songname=mu');
+    // console.log(search)
+    const a = document.createElement("a")
+    a.href = `${window.location.origin}/search?ArcId=${search.value}`
+    a.click()
+    // navigateTo({
+    //     path: "/search",
+    //     name: "search"
+    // })
+    // router.push({
+    //     path: "/search",
+    //     name: "search",
+    //     params: {
+    //         ArcId: search.value
+    //     }
+    // })
 }
 
 useHead({
@@ -63,8 +82,9 @@ useHead({
     color: transparent;
     background-image: url("@/assets/img/title.png");
     background-repeat: no-repeat;
-    background-size: 100%;
+    background-size: contain;
     position: relative;
+    background-position: center;
 }
 
 .mainPage {
@@ -92,7 +112,8 @@ useHead({
     width: 100vw;
     overflow-y: auto;
     padding-left: 50vw;
-    &::-webkit-scrollbar{
+
+    &::-webkit-scrollbar {
         display: none;
     }
 }
@@ -142,19 +163,19 @@ useHead({
         .searchIcon {
             object-fit: cover;
             padding-right: 20px;
-            height: 50%;
+            height: 40%;
         }
 
         #search {
+            font-family: "Exo";
             height: 100%;
             outline: none;
             background-color: transparent;
             border: none;
             margin: 0 20px;
-            font-size: 22px;
-            font-weight: bold;
+            font-size: 16px;
+            font-weight: 500;
             flex: 1;
-            font-family: "Exo";
             width: 100%;
 
             &::placeholder {

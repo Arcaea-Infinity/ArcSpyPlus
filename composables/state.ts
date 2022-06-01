@@ -1,0 +1,1 @@
+export const useSearch = () => useState<string>('searchValue', () => '')
