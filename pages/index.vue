@@ -79,8 +79,9 @@ useHead({
     color: transparent;
     background-image: url("@/assets/img/title.png");
     background-repeat: no-repeat;
-    background-size: 100%;
+    background-size: contain;
     position: relative;
+    background-position: center;
 }
 
 .mainPage {
