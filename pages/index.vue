@@ -1,43 +1,47 @@
 
 <template>
-    <div class="mainPage">
-        <MainPageLineBg></MainPageLineBg>
-        <div class="mainPage-fullPage">
-            <header class="mainPage-header">
-                <h1 class="title">
-                    arcSpy+
-                    <MainPageFontP></MainPageFontP>
-                </h1>
-                <h2 class="description">The next generation score
-                    profiler for Arcaea</h2>
-            </header>
-            <main class="mainPage-main">
-                <form class="searchBox" :class="{ 'searchBoxError': showSearchError }" action="" @submit.prevent>
-                    <img src="@/assets/img/qrCode.webp" class="qrCode" alt="图片加载失败" />
-                    <input type="search" v-model="search" id="search" placeholder="Search your ArcID"
-                        @keyup.enter="SearchValue">
-                    <div style="height:100%" class="align-center" @click="SearchValue">
-                        <img src="@/assets/img/search_icon.webp" class="searchIcon" alt="图片加载失败" />
-                    </div>
-                </form>
-                <aside class="search-leaderBoard-box">
-                    <ul class="search-leaderBoard">
-                        <li class="search-leader" v-for="item in 19">
-                            616SB
-                        </li>
-                    </ul>
-                </aside>
-            </main>
-            <footer class="mainPage-footer">
-                <span id="arcspy-version">
-                    Build v0.1.041221
-                </span>
-                <a href="https://github.com/Arcaea-Infinity/ArcSpyPlus" class="githubLogo" target="_blank">
-                    <span class="iconfont spy-github"></span>
-                </a>
-            </footer>
-        </div>
-    </div>
+    <!-- <div class="mainPage"> -->
+    <NuxtLayout name="page">
+        <!-- <div> -->
+            <MainPageLineBg></MainPageLineBg>
+            <div class="mainPage-fullPage">
+                <header class="mainPage-header">
+                    <h1 class="title">
+                        arcSpy+
+                        <MainPageFontP></MainPageFontP>
+                    </h1>
+                    <h2 class="description">The next generation score
+                        profiler for Arcaea</h2>
+                </header>
+                <main class="mainPage-main">
+                    <form class="searchBox" :class="{ 'searchBoxError': showSearchError }" action="" @submit.prevent>
+                        <img src="@/assets/img/qrCode.webp" class="qrCode" alt="图片加载失败" />
+                        <input type="search" v-model="search" id="search" placeholder="Search your ArcID"
+                            @keyup.enter="SearchValue">
+                        <div style="height:100%" class="align-center" @click="SearchValue">
+                            <img src="@/assets/img/search_icon.webp" class="searchIcon" alt="图片加载失败" />
+                        </div>
+                    </form>
+                    <aside class="search-leaderBoard-box">
+                        <ul class="search-leaderBoard">
+                            <li class="search-leader" v-for="item in 19">
+                                616SB
+                            </li>
+                        </ul>
+                    </aside>
+                </main>
+                <footer class="mainPage-footer">
+                    <span id="arcspy-version">
+                        Build v0.1.041221
+                    </span>
+                    <a href="https://github.com/Arcaea-Infinity/ArcSpyPlus" class="githubLogo" target="_blank">
+                        <span class="iconfont spy-github"></span>
+                    </a>
+                </footer>
+            </div>
+        <!-- </div> -->
+    </NuxtLayout>
+    <!-- </div> -->
 </template>
 
 <script lang="ts" setup>
@@ -82,26 +86,18 @@ useHead({
     background-position: center;
 }
 
-.mainPage {
-    position: relative;
-    background: url("@/assets/img/mainPage_bg.png");
-    background-position: bottom 91% right 56%;
-    background-repeat: no-repeat;
-    background-size: 190%;
-    height: 100vh;
-    overflow: hidden;
 
-    .mainPage-fullPage {
-        position: absolute;
-        z-index: 10;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
+
+.mainPage-fullPage {
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .description {
