@@ -36,11 +36,27 @@
 </template>
 
 <script lang="ts" setup>
-const search = ref<string>("")
+const search = useSearch();
+// refresh();
+// const search = () => useState('')
 
+// const router = useRouter()
 async function SearchValue() {
-    console.log(search.value, '触发搜索')
-    // const result = await useFetch('https://server.awbugl.top/botarcapi/song/info?songname=mu');
+    // console.log(search)
+    const a = document.createElement("a")
+    a.href = `${window.location.origin}/search?ArcId=${search.value}`
+    a.click()
+    // navigateTo({
+    //     path: "/search",
+    //     name: "search"
+    // })
+    // router.push({
+    //     path: "/search",
+    //     name: "search",
+    //     params: {
+    //         ArcId: search.value
+    //     }
+    // })
 }
 
 useHead({
@@ -92,7 +108,8 @@ useHead({
     width: 100vw;
     overflow-y: auto;
     padding-left: 50vw;
-    &::-webkit-scrollbar{
+
+    &::-webkit-scrollbar {
         display: none;
     }
 }
@@ -142,19 +159,19 @@ useHead({
         .searchIcon {
             object-fit: cover;
             padding-right: 20px;
-            height: 50%;
+            height: 40%;
         }
 
         #search {
+            font-family: "Exo";
             height: 100%;
             outline: none;
             background-color: transparent;
             border: none;
             margin: 0 20px;
-            font-size: 22px;
-            font-weight: bold;
+            font-size: 16px;
+            font-weight: 500;
             flex: 1;
-            font-family: "Exo";
             width: 100%;
 
             &::placeholder {
