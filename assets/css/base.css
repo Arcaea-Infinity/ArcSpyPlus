@@ -19,18 +19,44 @@ a {
 
 @font-face {
     font-family: 'Exo';
-    src: url('../font/Exo-Regular.ttf') format('truetype');  font-display: swap;
+    src: url('../font/Exo-Regular.ttf') format('truetype');
+    font-display: swap;
 
 }
+
 @font-face {
     font-family: 'GeoSan';
-    src: url('../font/GeosansLight.ttf') format('truetype');  font-display: swap;
-
+    src: url('../font/GeosansLight.ttf') format('truetype');
+    font-display: swap;
 }
-ul,li,ol{
+
+@font-face {
+    font-family: 'Kazesawa';
+    src: url('../font/Kazesawa-Regular.woff.ttf') format('truetype');
+    font-display: swap;
+}
+
+ul,
+li,
+ol {
     list-style: none;
 }
-.align-center{
+
+.align-center {
     display: flex;
     align-items: center;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex {
+    display: flex;
+}
+
+.between {
+    display: flex;
+    justify-content: space-between;
 }
