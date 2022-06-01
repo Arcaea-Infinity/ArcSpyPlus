@@ -1,65 +1,61 @@
 
 <template>
     <div class="mainPage">
-
-        <header class="mainPage-header">
-            <h1 class="title">
-                arcSpy+
-                <MainPageFontP></MainPageFontP>
-            </h1>
-            <h2 class="description">The next generation score
-                profiler for Arcaea</h2>
-        </header>
-        <main class="mainPage-main">
-            <form class="searchBox" action="" @submit.prevent>
-                <img src="@/assets/img/qrCode.webp" class="qrCode" alt="图片加载失败" />
-                <input type="search" v-model="search" id="search" placeholder="Search your ArcID"
-                    @keyup.enter="SearchValue">
-                <div style="height:100%" class="align-center" @click="SearchValue">
-                    <img src="@/assets/img/search_icon.webp" class="searchIcon" alt="图片加载失败" />
-                </div>
-            </form>
-            <aside class="search-leaderBoard-box">
-                <ul class="search-leaderBoard">
-                    <li class="search-leader" v-for="item in 19">
-                        616SB
-                    </li>
-                </ul>
-            </aside>
-        </main>
-        <footer class="mainPage-footer">
-            <span id="arcspy-version">
-                Build v0.1.041221
-            </span>
-            <a href="https://github.com/Arcaea-Infinity/ArcSpyPlus" class="githubLogo" target="_blank">
-                <span class="iconfont spy-github"></span>
-            </a>
-        </footer>
+        <LineBg></LineBg>
+        <div class="mainPage-fullPage">
+            <header class="mainPage-header">
+                <h1 class="title">
+                    arcSpy+
+                    <MainPageFontP></MainPageFontP>
+                </h1>
+                <h2 class="description">The next generation score
+                    profiler for Arcaea</h2>
+            </header>
+            <main class="mainPage-main">
+                <form class="searchBox" :class="{ 'searchBoxError': showSearchError }" action="" @submit.prevent>
+                    <img src="@/assets/img/qrCode.webp" class="qrCode" alt="图片加载失败" />
+                    <input type="search" v-model="search" id="search" placeholder="Search your ArcID"
+                        @keyup.enter="SearchValue">
+                    <div style="height:100%" class="align-center" @click="SearchValue">
+                        <img src="@/assets/img/search_icon.webp" class="searchIcon" alt="图片加载失败" />
+                    </div>
+                </form>
+                <aside class="search-leaderBoard-box">
+                    <ul class="search-leaderBoard">
+                        <li class="search-leader" v-for="item in 19">
+                            616SB
+                        </li>
+                    </ul>
+                </aside>
+            </main>
+            <footer class="mainPage-footer">
+                <span id="arcspy-version">
+                    Build v0.1.041221
+                </span>
+                <a href="https://github.com/Arcaea-Infinity/ArcSpyPlus" class="githubLogo" target="_blank">
+                    <span class="iconfont spy-github"></span>
+                </a>
+            </footer>
+        </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-const search = useSearch();
-// refresh();
-// const search = () => useState('')
-
-// const router = useRouter()
+import LineBg from '~~/components/mainPage/LineBg.vue';
+const search = ref<string>("");
+const showSearchError = ref<boolean>(false)
 async function SearchValue() {
-    // console.log(search)
-    const a = document.createElement("a")
-    a.href = `${window.location.origin}/search?ArcId=${search.value}`
-    a.click()
-    // navigateTo({
-    //     path: "/search",
-    //     name: "search"
-    // })
-    // router.push({
-    //     path: "/search",
-    //     name: "search",
-    //     params: {
-    //         ArcId: search.value
-    //     }
-    // })
+    if (typeof search.value === "string" && search.value.length > 0) {
+        const a = document.createElement("a")
+        a.href = `${window.location.origin}/search?ArcId=${search.value}`
+        a.click()
+    } else {
+        showSearchError.value = true
+        setTimeout(() => {
+            showSearchError.value = false
+        }, 200)
+    }
+
 }
 
 useHead({
@@ -74,7 +70,7 @@ useHead({
     }
 })
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .title {
     text-align: center;
     font-size: min(126px, 15vw);
@@ -88,15 +84,25 @@ useHead({
 }
 
 .mainPage {
+    position: relative;
     background: url("@/assets/img/mainPage_bg.png");
     background-position: bottom 91% right 56%;
     background-repeat: no-repeat;
     background-size: 190%;
     height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
+    overflow: hidden;
+
+    .mainPage-fullPage {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 }
 
 .description {
@@ -141,8 +147,12 @@ useHead({
 .mainPage-main {
     margin: 10vh auto 0vh;
 
+    .searchBoxError {
+        background: red;
+    }
+
     .searchBox {
-        width: 70vw;
+        width: 72vw;
         max-width: 550px;
         border: 1px solid rgba(78, 78, 83, 0.2);
         height: 56px;
@@ -153,6 +163,7 @@ useHead({
         align-items: center;
         box-shadow: 0px 0px 10px 0px rgba(55, 54, 91, 0.2);
         margin: 0 auto;
+        transition: background-color 0.12s;
 
         .qrCode {
             object-fit: cover;
