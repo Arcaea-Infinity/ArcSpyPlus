@@ -8,7 +8,6 @@
             <span class="mainPageTextP-eye"></span>
             <img src="@/assets/img/p/Layer_4.webp" class="mainPageTextP-4" alt="" />
         </span>
-
     </div>
 </template>
 

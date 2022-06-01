@@ -45,16 +45,19 @@ const userDetali = ref<SearchValue["content"]["account_info"]>()
 const route = useRoute();
 if (typeof route.query.ArcId === "string" && route.query.ArcId.length > 0) {
     try {
-        const result: SearchValue = await $fetch(
-            `https://server.awbugl.top/botarcapi/user/info?user=${route.query.ArcId}`,
+        const { data: result } = await useFetch<SearchValue>(
+            `https://server.awbugl.top/botarcapi/user/info?user=${route.query.ArcId.replaceAll(" ","")}`,
             {
                 headers: {
                     "user-agent": "ArcSpy3S2D2G1L2JB2F0"
                 }
             }
         );
-        if (result.status === 0 && result.content.account_info) {
-            userDetali.value = result.content.account_info
+        // const result = data.value
+        // : SearchValue
+        // : 
+        if (result.value.status === 0 && result.value.content.account_info) {
+            userDetali.value = result.value.content.account_info
         }
     } catch (error) {
 

@@ -1,7 +1,7 @@
 
 <template>
     <div class="mainPage">
-        <LineBg></LineBg>
+        <MainPageLineBg></MainPageLineBg>
         <div class="mainPage-fullPage">
             <header class="mainPage-header">
                 <h1 class="title">
@@ -41,7 +41,6 @@
 </template>
 
 <script lang="ts" setup>
-import LineBg from '~~/components/mainPage/LineBg.vue';
 const search = ref<string>("");
 const showSearchError = ref<boolean>(false)
 async function SearchValue() {

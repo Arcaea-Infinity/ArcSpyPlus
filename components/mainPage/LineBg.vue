@@ -23,10 +23,6 @@
 
 @keyframes rainSports {
     from {
-        // width: #{randomNum(40, 90)}vmin;
-        // top:#{randomNum(10, 100)}vh;
-        // left:#{randomNum(0, 50)}vw;
-        // opacity: #{randomNum(0.4, 1)};
         transform: rotate(147deg) translateX(calc(-100vw - 100%));
     }
 
