@@ -11,11 +11,14 @@
                 profiler for Arcaea</h2>
         </header>
         <main class="mainPage-main">
-            <div class="searchBox">
+            <form class="searchBox" action="" @submit.prevent>
                 <img src="@/assets/img/qrCode.webp" class="qrCode" alt="图片加载失败" />
-                <input type="text" v-model="search" id="search" placeholder="Search your ArcID" @change="SearchValue">
-                <img src="@/assets/img/search_icon.webp" class="searchIcon" @click="SearchValue" alt="图片加载失败" />
-            </div>
+                <input type="search" v-model="search" id="search" placeholder="Search your ArcID"
+                    @keyup.enter="SearchValue">
+                <div style="height:100%" class="align-center" @click="SearchValue">
+                    <img src="@/assets/img/search_icon.webp" class="searchIcon" alt="图片加载失败" />
+                </div>
+            </form>
             <aside class="search-leaderBoard-box">
                 <ul class="search-leaderBoard">
                     <li class="search-leader" v-for="item in 19">

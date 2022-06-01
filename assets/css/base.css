@@ -30,3 +30,7 @@ a {
 ul,li,ol{
     list-style: none;
 }
+.align-center{
+    display: flex;
+    align-items: center;
+}
