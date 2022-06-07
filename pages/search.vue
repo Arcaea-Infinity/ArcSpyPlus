@@ -28,76 +28,25 @@
 </template>
 
 <script lang="ts" setup>
-
-interface RecentScoreType {
-    score: number;
-    health: number;
-    rating: number;
-    song_id: string;
-    modifier: number;
-    difficulty: number;
-    clear_type: number;
-    best_clear_type: number;
-    time_played: number;
-    near_count: number;
-    miss_count: number;
-    perfect_count: number;
-    shiny_perfect_count: number;
-}
-
-interface SearchValue {
-    status: number;
-    message: 0 | -1 | -3 | -4;
-    content?: {
-        account_info: {
-            code: string;
-            name: string;
-            user_id: number;
-            is_mutual: boolean;
-            is_char_uncapped_override: boolean;
-            is_char_uncapped: boolean;
-            is_skill_sealed: boolean;
-            rating: number;
-            join_date: number;
-            character: number;
-        };
-        recent_score: RecentScoreType[];
-    };
-}
+import type { SearchValue } from "@/composables/search"
+import search_Account from "@/composables/search"
 
 const userDetali = ref<SearchValue["content"]["account_info"]>()
 const songList = ref<SearchValue["content"]["recent_score"]>([])
 const route = useRoute();
+
 if (typeof route.query.ArcId === "string" && route.query.ArcId.length > 0) {
-    try {
-        const { data: result } = await useFetch<SearchValue>(
-            `https://server.awbugl.top/botarcapi/user/info?user=${route.query.ArcId.replaceAll(" ", "")}`,
-            {
-                headers: {
-                    "user-agent": "ArcSpy3S2D2G1L2JB2F0"
-                }
-            }
-        );
-        // const result = data.value
-        // : SearchValue
-        // : 
-        if (result.value.status === 0 && result.value.content.account_info) {
-            userDetali.value = result.value.content.account_info
-            songList.value = result.value.content.recent_score ?? []
-        }
-    } catch (error) {
-
-    }
-
+    const search = new search_Account(route.query.ArcId);
+    await search.onCreated();
+    userDetali.value = search.getAccount_info()
+    songList.value = search.getSongList()
 }
+
 function insertStr(soure: string, start: number, newStr: string) {
-    return soure.slice(0, start) + newStr + soure.slice(start);
+    let newSoure = soure.split("").reverse().join("")
+    return `${newSoure.slice(0, start)}${newStr}${newSoure.slice(start)}`.split("").reverse().join("")
 }
-//     result.value = JSON.stringify(newresult)
-//     console.log(result, "我是查询到的结果")
-// } else {
-//     window.location.replace(window.location.origin)
-// }
+
 
 </script>
 <style lang="scss" scoped>

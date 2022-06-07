@@ -3,42 +3,43 @@
     <!-- <div class="mainPage"> -->
     <NuxtLayout name="page">
         <!-- <div> -->
-            <MainPageLineBg></MainPageLineBg>
-            <div class="mainPage-fullPage">
-                <header class="mainPage-header">
-                    <h1 class="title">
-                        arcSpy+
-                        <MainPageFontP></MainPageFontP>
-                    </h1>
-                    <h2 class="description">The next generation score
-                        profiler for Arcaea</h2>
-                </header>
-                <main class="mainPage-main">
-                    <form class="searchBox" :class="{ 'searchBoxError': showSearchError }" action="" @submit.prevent>
-                        <img src="@/assets/img/qrCode.webp" class="qrCode" alt="图片加载失败" />
-                        <input type="search" v-model="search" id="search" placeholder="Search your ArcID"
-                            @keyup.enter="SearchValue">
-                        <div style="height:100%" class="align-center" @click="SearchValue">
-                            <img src="@/assets/img/search_icon.webp" class="searchIcon" alt="图片加载失败" />
-                        </div>
-                    </form>
-                    <aside class="search-leaderBoard-box">
-                        <ul class="search-leaderBoard">
-                            <li class="search-leader" v-for="item in 19">
-                                616SB
-                            </li>
-                        </ul>
-                    </aside>
-                </main>
-                <footer class="mainPage-footer">
-                    <span id="arcspy-version">
-                        Build v0.1.041221
-                    </span>
-                    <a href="https://github.com/Arcaea-Infinity/ArcSpyPlus" class="githubLogo" target="_blank">
-                        <span class="iconfont spy-github"></span>
-                    </a>
-                </footer>
-            </div>
+        <MainPageLineBg ></MainPageLineBg>
+        <div class="mainPage-fullPage">
+            <header class="mainPage-header">
+                <h1 class="title">
+                    arcSpy+
+                    <img draggable="false" src="@/assets/img/title.svg" alt="title">
+                    <!-- <MainPageFontP></MainPageFontP> -->
+                </h1>
+                <h2 class="description">The next generation score
+                    profiler for Arcaea</h2>
+            </header>
+            <main class="mainPage-main">
+                <form class="searchBox" :class="{ 'searchBoxError': showSearchError }" action="" @submit.prevent>
+                    <img draggable="false" src="@/assets/img/qrCode.webp" class="qrCode" alt="图片加载失败" />
+                    <input type="search" v-model="search" id="search" placeholder="Search your ArcID"
+                        @keyup.enter="SearchValue">
+                    <div style="height:100%" class="align-center" @click="SearchValue">
+                        <img draggable="false" src="@/assets/img/search_icon.webp" class="searchIcon" alt="图片加载失败" />
+                    </div>
+                </form>
+                <aside class="search-leaderBoard-box">
+                    <ul class="search-leaderBoard">
+                        <li class="search-leader" v-for="item in 19">
+                            616SB
+                        </li>
+                    </ul>
+                </aside>
+            </main>
+            <footer class="mainPage-footer">
+                <span id="arcspy-version">
+                    Build v0.1.041221
+                </span>
+                <a href="https://github.com/Arcaea-Infinity/ArcSpyPlus" class="githubLogo" target="_blank">
+                    <span class="iconfont spy-github"></span>
+                </a>
+            </footer>
+        </div>
         <!-- </div> -->
     </NuxtLayout>
     <!-- </div> -->
@@ -79,11 +80,24 @@ useHead({
     font-size: min(126px, 15vw);
     margin: 13vh auto 10vh;
     color: transparent;
-    background-image: url("@/assets/img/title.png");
-    background-repeat: no-repeat;
-    background-size: contain;
     position: relative;
-    background-position: center;
+    user-select: none;
+    img {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        object-fit: cover;
+        width: 50vw;
+        margin: 0 auto;
+        user-select: none;
+    }
+
+    // background-image: url("@/assets/img/title.png");
+    // background-repeat: no-repeat;
+    // background-size: contain;
+    // position: relative;
+    // background-position: center;
 }
 
 
@@ -107,6 +121,8 @@ useHead({
     line-height: 130%;
     color: #393856;
     font-family: "GeoSan";
+    margin: 0 auto;
+    user-select: none;
 }
 
 .search-leaderBoard-box {
@@ -136,6 +152,7 @@ useHead({
         font-family: "Exo";
         font-weight: bold;
         margin-bottom: 6px;
+        user-select: none;
     }
 }
 
@@ -164,26 +181,34 @@ useHead({
             object-fit: cover;
             padding-left: 20px;
             height: 50%;
+            user-select: none;
         }
 
         .searchIcon {
             object-fit: cover;
             padding-right: 20px;
             height: 40%;
+            user-select: none;
         }
 
         #search {
             font-family: "Exo";
             height: 100%;
             outline: none;
-            background-color: transparent;
+            background-color: transparent !important;
             border: none;
             margin: 0 20px;
             font-size: 16px;
             font-weight: 500;
             flex: 1;
             width: 100%;
+            user-select: none;
 
+          
+            &:-internal-autofill-selected {
+                background-color: transparent !important;
+            }
+  
             &::placeholder {
                 font-family: "Exo";
                 font-size: 16px;
@@ -205,6 +230,7 @@ useHead({
     #arcspy-version {
         margin: 0 auto;
         font-family: "Exo";
+        user-select: none;
     }
 
     .githubLogo {
@@ -212,6 +238,7 @@ useHead({
         right: 6vmin;
         top: 50%;
         transform: translateY(-50%);
+        user-select: none;
 
         .spy-github {
             opacity: 0.6;

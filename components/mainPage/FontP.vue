@@ -21,10 +21,6 @@
     top: 0;
     width: 19%;
 
-    // img {
-    //     object-fit: cover;
-    // }
-
     .mainPageTextP-o {
         border: 5px solid #1f1e33;
         border-radius: 50%;
