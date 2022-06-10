@@ -1,6 +1,11 @@
 export type ResultCallBack = (result: SearchValue["content"]) => void;
 
 
+export interface UserHistory {
+    text: string;
+    time: number;
+}
+
 export interface RecentScoreType {
     score: number;
     health: number;
@@ -53,23 +58,16 @@ export default class search_Account {
 
     public async onCreated(): Promise<void> {
         try {
-            console.log("发起请求")
-            // const { data: result, refresh, error } =
             const { data: result } = await useFetch<SearchValue>(
                 `botarcapi/user/info?user=${this.ArcId.replaceAll(" ", "")}`,
                 {
                     baseURL: "https://server.awbugl.top/",
-                    async onResponseError(ctx) {
-                        console.log(ctx, '我是错误')
-                    },
+
                     async onRequest(ctx) {
                         console.log(ctx, '我是请求体')
                     },
                     async onRequestError(ctx) {
                         console.log(ctx, '我是请求拦截的错误')
-                    },
-                    async onResponse(ctx) {
-                        console.log(ctx.response, '我是响应体')
                     },
                     headers: {
                         "user-agent": "ArcSpy3S2D2G1L2JB2F0"

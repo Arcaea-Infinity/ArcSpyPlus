@@ -3,7 +3,7 @@
     <!-- <div class="mainPage"> -->
     <NuxtLayout name="page">
         <!-- <div> -->
-        <MainPageLineBg ></MainPageLineBg>
+        <MainPageLineBg></MainPageLineBg>
         <div class="mainPage-fullPage">
             <header class="mainPage-header">
                 <h1 class="title">
@@ -46,13 +46,27 @@
 </template>
 
 <script lang="ts" setup>
+import { UserHistory } from '~~/composables/search';
+
 const search = ref<string>("");
-const showSearchError = ref<boolean>(false)
+const showSearchError = ref<boolean>(false);
+const router = useRouter()
 async function SearchValue() {
     if (typeof search.value === "string" && search.value.length > 0) {
-        const a = document.createElement("a")
-        a.href = `${window.location.origin}/search?ArcId=${search.value}`
-        a.click()
+        try {
+            let userHistory: UserHistory[] | null | string = localStorage.getItem("searchHistory");
+            if (userHistory) userHistory = JSON.parse(userHistory) as UserHistory[];
+            // if (Array.isArray(userHistory) && userHistory is UserHistory[]) {
+
+            // }
+
+
+        } catch (error) {
+
+        } finally {
+            window.location.replace(`${window.location.origin}/search?ArcId=${search.value}`)
+        }
+
     } else {
         showSearchError.value = true
         setTimeout(() => {
@@ -64,7 +78,7 @@ async function SearchValue() {
 
 useHead({
     titleTemplate: 'My App - %s',
-    viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
+    viewport: 'width=device-width,user-scalable=no, initial-scale=1, maximum-scale=1',
     charset: 'utf-8',
     meta: [
         { name: 'description', content: 'My amazing site.' }
@@ -82,6 +96,7 @@ useHead({
     color: transparent;
     position: relative;
     user-select: none;
+
     img {
         position: absolute;
         left: 50%;
@@ -204,11 +219,11 @@ useHead({
             width: 100%;
             user-select: none;
 
-          
+
             &:-internal-autofill-selected {
                 background-color: transparent !important;
             }
-  
+
             &::placeholder {
                 font-family: "Exo";
                 font-size: 16px;

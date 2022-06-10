@@ -3,16 +3,16 @@
         <div class="searchMask column">
             <div class="between align-center userInfo">
                 <div class="column ">
-                    <div class="userName">{{ userDetali.name }}</div>
+                    <div class="userName">{{ userDetali?.name }}</div>
                     <div>
-                        ArcID {{ userDetali.code }}
+                        ArcID {{ userDetali?.code }}
                     </div>
                     <div>
-                        Join Date {{ new Date(userDetali.join_date).toLocaleDateString() }}
+                        Join Date {{ new Date(userDetali?.join_date || 0).toLocaleDateString() }}
                     </div>
                 </div>
                 <div>
-                    PPT:{{ insertStr(`${userDetali.rating}`, 2, ".") }}
+                    PPT:{{ insertStr(`${userDetali?.rating}`, 2, ".") }}
                 </div>
             </div>
             <ul class="songList">
@@ -29,24 +29,24 @@
 
 <script lang="ts" setup>
 import type { SearchValue } from "@/composables/search"
-import search_Account from "@/composables/search"
-
+import search_Account from "@/composables/search";
 const userDetali = ref<SearchValue["content"]["account_info"]>()
-const songList = ref<SearchValue["content"]["recent_score"]>([])
+const songList = ref<SearchValue["content"]["recent_score"]>([]);
 const route = useRoute();
 
-if (typeof route.query.ArcId === "string" && route.query.ArcId.length > 0) {
-    const search = new search_Account(route.query.ArcId);
-    await search.onCreated();
-    userDetali.value = search.getAccount_info()
-    songList.value = search.getSongList()
-}
+onServerPrefetch(async () => {
+    if (typeof route.query.ArcId === "string" && route.query.ArcId.length > 0) {
+        const search = new search_Account(route.query.ArcId);
+        await search.onCreated()
+        userDetali.value = search.getAccount_info()
+        songList.value = search.getSongList()
+    }
+})
 
 function insertStr(soure: string, start: number, newStr: string) {
     let newSoure = soure.split("").reverse().join("")
     return `${newSoure.slice(0, start)}${newStr}${newSoure.slice(start)}`.split("").reverse().join("")
 }
-
 
 </script>
 <style lang="scss" scoped>
