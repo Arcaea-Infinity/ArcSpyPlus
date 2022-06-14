@@ -8,7 +8,7 @@
                         ArcID {{ userDetali?.code }}
                     </div>
                     <div>
-                        Join Date {{ new Date(userDetali?.join_date || 0).toLocaleDateString() }}
+                        Join Date {{ new Date(userDetali?.join_date).toLocaleDateString().replaceAll("/", "-") }}
                     </div>
                 </div>
                 <div>
@@ -28,25 +28,19 @@
 </template>
 
 <script lang="ts" setup>
-import type { SearchValue } from "@/composables/search"
-import search_Account from "@/composables/search";
-const userDetali = ref<SearchValue["content"]["account_info"]>()
-const songList = ref<SearchValue["content"]["recent_score"]>([]);
+import search_Account from "~~/composables/search";
 const route = useRoute();
-
-onServerPrefetch(async () => {
-    if (typeof route.query.ArcId === "string" && route.query.ArcId.length > 0) {
-        const search = new search_Account(route.query.ArcId);
-        await search.onCreated()
-        userDetali.value = search.getAccount_info()
-        songList.value = search.getSongList()
-    }
-})
-
 function insertStr(soure: string, start: number, newStr: string) {
     let newSoure = soure.split("").reverse().join("")
     return `${newSoure.slice(0, start)}${newStr}${newSoure.slice(start)}`.split("").reverse().join("")
 }
+const search = new search_Account(route.query.ArcId as string);
+await search.onCreated()
+const userDetali = search.getAccount_info()
+const songList = search.getSongList();
+console.log(userDetali)
+
+
 
 </script>
 <style lang="scss" scoped>

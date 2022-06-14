@@ -56,11 +56,6 @@ async function SearchValue() {
         try {
             let userHistory: UserHistory[] | null | string = localStorage.getItem("searchHistory");
             if (userHistory) userHistory = JSON.parse(userHistory) as UserHistory[];
-            // if (Array.isArray(userHistory) && userHistory is UserHistory[]) {
-
-            // }
-
-
         } catch (error) {
 
         } finally {

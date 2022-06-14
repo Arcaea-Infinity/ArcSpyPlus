@@ -1,3 +1,5 @@
+import { Ref } from "vue";
+
 export type ResultCallBack = (result: SearchValue["content"]) => void;
 
 
@@ -35,7 +37,7 @@ export interface SearchValue {
             is_char_uncapped: boolean;
             is_skill_sealed: boolean;
             rating: number;
-            join_date: number;
+            join_date: number | string;
             character: number;
         };
         recent_score: RecentScoreType[];
@@ -48,8 +50,8 @@ export default class search_Account {
     private ArcId: string = "";
     private Status: "success" | "failed" | "padding" = "padding"
     constructor(ArcId: string) {
-        this.searchResultBack.set(-3, this.AccountStatus_notFound.bind(this));
-        this.searchResultBack.set(0, this.AccountStatus_success.bind(this));
+        this.searchResultBack.set(-3, this.AccountStatus_notFound);
+        this.searchResultBack.set(0, this.AccountStatus_success);
         // this.searchResultBack.forEach(e => {
         //     e = e.bind(that) 不知为何此处不生效
         // })
@@ -58,26 +60,55 @@ export default class search_Account {
 
     public async onCreated(): Promise<void> {
         try {
-            const { data: result } = await useFetch<SearchValue>(
-                `botarcapi/user/info?user=${this.ArcId.replaceAll(" ", "")}`,
+            console.log(this.ArcId, '被查询的arcId')
+            const { data: result } = await useAsyncData<SearchValue>(
+                "account_info",
+                () => $fetch(`botarcapi/user/info`,
+                    {
+                        params: {
+                            user: this.ArcId.replaceAll(" ", "")
+                        },
+                        retry: 3,
+                        baseURL: "https://server.awbugl.top/",
+                        async onRequestError(e) {
+                            console.log(e, "请求错误")
+                        },
+                        async onResponseError(e) {
+                            console.log(e, "响应错误")
+                        },
+                        headers: {
+                            "user-agent": "ArcSpy3S2D2G1L2JB2F0"
+                        }
+                    }),
                 {
-                    baseURL: "https://server.awbugl.top/",
-
-                    async onRequest(ctx) {
-                        console.log(ctx, '我是请求体')
-                    },
-                    async onRequestError(ctx) {
-                        console.log(ctx, '我是请求拦截的错误')
-                    },
-                    headers: {
-                        "user-agent": "ArcSpy3S2D2G1L2JB2F0"
+                    lazy: false,
+                    server: true,
+                    default: () => {
+                        return {
+                            status: -3,
+                            message: "我是默认返回",
+                            content: {
+                                account_info: {
+                                    code: "1919",
+                                    name: "查询失败",
+                                    user_id: 114514,
+                                    is_mutual: false,
+                                    is_char_uncapped_override: false,
+                                    is_char_uncapped: false,
+                                    is_skill_sealed: false,
+                                    rating: 616,
+                                    join_date: new Date().toLocaleString().replaceAll("/", "-"),
+                                    character: 0,
+                                },
+                                recent_score: [],
+                            },
+                        }
                     }
                 }
             );
-            console.log(result.value, '我是最终拿到的值')
             if (result.value) {
                 const Back = this.searchResultBack.get(result.value.status);
-                if (Back) Back(result.value.content);
+                if (Back) Back.call(this, result.value.content);
                 return
             } else {
                 this.Status = "failed"
@@ -94,28 +125,12 @@ export default class search_Account {
     private AccountStatus_success(result: SearchValue["content"]) {
         this.Status = "success";
         this.account_Info = result
+        return
     }
-    public getAccount_info(): SearchValue["content"]["account_info"] {
-        if (this.Status === "success") {
-            return this.account_Info.account_info
-        } else {
-            return {
-                code: "1919",
-                name: "查询失败",
-                user_id: 114514,
-                is_mutual: false,
-                is_char_uncapped_override: false,
-                is_char_uncapped: false,
-                is_skill_sealed: false,
-                rating: 616,
-                join_date: Date.now(),
-                character: 0,
-            }
-        }
+    public getAccount_info(): Ref<SearchValue["content"]["account_info"]> {
+        return ref(this.account_Info.account_info)
     }
-    public getSongList(): SearchValue["content"]["recent_score"] {
-        if (this.Status === "success") {
-            return this.account_Info.recent_score
-        }
+    public getSongList(): Ref<SearchValue["content"]["recent_score"]> {
+        return ref(this.account_Info.recent_score || [])
     }
 }
