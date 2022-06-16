@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /wp-*
+Disallow: /*&*
+Disallow: /*%*
+Disallow: /tag=*
+Disallow: /?feed
+Disallow: /?=*
+Sitemap: http://www.sngblog.cn/sitemap_baidu.xml
+Sitemap: http://www.sngblog.cn/sitemap.xml
