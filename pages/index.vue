@@ -18,15 +18,16 @@
                 <form class="searchBox" :class="{ 'searchBoxError': showSearchError }" action="" @submit.prevent>
                     <img draggable="false" src="@/assets/img/qrCode.webp" class="qrCode" alt="图片加载失败" />
                     <input type="search" v-model="search" id="search" placeholder="Search your ArcID"
-                        @keyup.enter="SearchValue">
-                    <div style="height:100%" class="align-center" @click="SearchValue">
+                        @keyup.enter="SearchValue()">
+                    <div style="height:100%" class="align-center" @click="SearchValue()">
                         <img draggable="false" src="@/assets/img/search_icon.webp" class="searchIcon" alt="图片加载失败" />
                     </div>
                 </form>
                 <aside class="search-leaderBoard-box">
                     <ul class="search-leaderBoard">
-                        <li class="search-leader" v-for="item in 19">
-                            616SB
+                        <li class="search-leader" @click="SearchValue(item.text)" v-for="(item, index) in SearchCard"
+                            :key="index">
+                            {{ item.text }}
                         </li>
                     </ul>
                 </aside>
@@ -50,16 +51,33 @@ import { UserHistory } from '~~/composables/search';
 
 const search = ref<string>("");
 const showSearchError = ref<boolean>(false);
-const router = useRouter()
-async function SearchValue() {
-    if (typeof search.value === "string" && search.value.length > 0) {
+const SearchCard = ref<UserHistory[]>([])
+onMounted(() => {
+    if (window && window.localStorage) {
+        let userHistory: UserHistory[] | null | string = localStorage.getItem("searchHistory");
+        SearchCard.value = userHistory ? JSON.parse(userHistory) as UserHistory[] : [];
+    }
+})
+async function SearchValue(e?: string) {
+    const value = (e ?? search.value).replaceAll(" ", "")
+    if (typeof value === "string" && value.length > 0) {
         try {
             let userHistory: UserHistory[] | null | string = localStorage.getItem("searchHistory");
-            if (userHistory) userHistory = JSON.parse(userHistory) as UserHistory[];
+            userHistory = userHistory ? JSON.parse(userHistory) as UserHistory[] : [];
+            const SearchFind = userHistory.find(item => item.text === value);
+            if (!SearchFind) {
+                userHistory.push({
+                    text: value,
+                    time: Date.now()
+                })
+                localStorage.setItem("searchHistory", JSON.stringify(userHistory))
+            }
+
+
         } catch (error) {
 
         } finally {
-            window.location.replace(`${window.location.origin}/search?ArcId=${search.value}`)
+            // window.location.replace(`${window.location.origin}/search?ArcId=${e ?? search.value}`)
         }
 
     } else {
@@ -72,15 +90,12 @@ async function SearchValue() {
 }
 
 useHead({
-    titleTemplate: 'My App - %s',
+    titleTemplate: 'ArcSpy+',
     viewport: 'width=device-width,user-scalable=no, initial-scale=1, maximum-scale=1',
     charset: 'utf-8',
     meta: [
-        { name: 'description', content: 'My amazing site.' }
-    ],
-    bodyAttrs: {
-        class: 'test'
-    }
+        { name: 'description', content: '一个简单的arc查分网站' }
+    ]
 })
 </script>
 <style lang="scss" scoped>
@@ -138,7 +153,7 @@ useHead({
 .search-leaderBoard-box {
     width: 100vw;
     overflow-y: auto;
-    padding-left: 50vw;
+    padding-left: 20vmin;
 
     &::-webkit-scrollbar {
         display: none;
@@ -148,7 +163,8 @@ useHead({
 .search-leaderBoard {
     display: flex;
     flex-wrap: wrap;
-    width: 200vw;
+    max-width: 150vmin;
+    min-width: 30vmin;
     margin-top: 16px;
 
     .search-leader {
