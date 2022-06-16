@@ -14,7 +14,7 @@
 <style lang="scss" scoped>
 .mainPage {
     position: relative;
-    background: url("@/assets/img/mainPage_bg.png");
+    background: url("@/assets/img/mainPage_bg.webp");
     background-position: bottom 91% right 56%;
     background-repeat: no-repeat;
     background-size: 190%;

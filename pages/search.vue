@@ -29,6 +29,7 @@
 
 <script lang="ts" setup>
 import search_Account from "~~/composables/search";
+
 const route = useRoute();
 function insertStr(soure: string, start: number, newStr: string) {
     let newSoure = soure.split("").reverse().join("")
@@ -69,6 +70,6 @@ console.log(userDetali)
 
 .searchMask {
     flex: 1;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.2);
 }
 </style>

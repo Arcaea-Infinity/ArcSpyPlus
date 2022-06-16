@@ -16,11 +16,11 @@
             </header>
             <main class="mainPage-main">
                 <form class="searchBox" :class="{ 'searchBoxError': showSearchError }" action="" @submit.prevent>
-                    <img draggable="false" src="@/assets/img/qrCode.webp" class="qrCode" alt="图片加载失败" />
+                    <img height="28" width="28" draggable="false" src="@/assets/img/qrCode.webp" class="qrCode" alt="图片加载失败" />
                     <input type="search" v-model="search" id="search" placeholder="Search your ArcID"
                         @keyup.enter="SearchValue()">
                     <div style="height:100%" class="align-center" @click="SearchValue()">
-                        <img draggable="false" src="@/assets/img/search_icon.webp" class="searchIcon" alt="图片加载失败" />
+                        <img width="21.59" height="21.59" draggable="false" src="@/assets/img/search_icon.webp" class="searchIcon" alt="图片加载失败" />
                     </div>
                 </form>
                 <aside class="search-leaderBoard-box">
@@ -48,7 +48,8 @@
 
 <script lang="ts" setup>
 import { UserHistory } from '~~/composables/search';
-
+// import img from "../assets/img/mainPage_bg.png?raw"
+// console.log(img)
 const search = ref<string>("");
 const showSearchError = ref<boolean>(false);
 const SearchCard = ref<UserHistory[]>([])
@@ -59,25 +60,24 @@ onMounted(() => {
     }
 })
 async function SearchValue(e?: string) {
+    console.log("开始查询咯")
     const value = (e ?? search.value).replaceAll(" ", "")
     if (typeof value === "string" && value.length > 0) {
         try {
             let userHistory: UserHistory[] | null | string = localStorage.getItem("searchHistory");
             userHistory = userHistory ? JSON.parse(userHistory) as UserHistory[] : [];
             const SearchFind = userHistory.find(item => item.text === value);
-            if (!SearchFind) {
-                userHistory.push({
-                    text: value,
-                    time: Date.now()
-                })
-                localStorage.setItem("searchHistory", JSON.stringify(userHistory))
-            }
-
-
+            if (SearchFind) throw new Error("查询到相同的历史记录")
+            if (userHistory.length >= 20) userHistory.shift()
+            userHistory.push({
+                text: value,
+                time: Date.now()
+            })
+            localStorage.setItem("searchHistory", JSON.stringify(userHistory))
         } catch (error) {
 
         } finally {
-            // window.location.replace(`${window.location.origin}/search?ArcId=${e ?? search.value}`)
+            window.location.replace(`${window.location.origin}/search?ArcId=${e ?? search.value}`)
         }
 
     } else {
@@ -95,7 +95,10 @@ useHead({
     charset: 'utf-8',
     meta: [
         { name: 'description', content: '一个简单的arc查分网站' }
-    ]
+    ],
+    htmlAttrs: {
+        lang: "zh-cn"
+    }
 })
 </script>
 <style lang="scss" scoped>
@@ -205,14 +208,14 @@ useHead({
 
         .qrCode {
             object-fit: cover;
-            padding-left: 20px;
-            height: 50%;
+            margin-left: 20px;
+            // height: 50%;
             user-select: none;
         }
 
         .searchIcon {
             object-fit: cover;
-            padding-right: 20px;
+            margin-right: 20px;
             height: 40%;
             user-select: none;
         }
