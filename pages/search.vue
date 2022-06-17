@@ -65,7 +65,7 @@ function updateSwitch(e: number) {
 
     .song {
         height: 30%;
-        border-radius: 30px;
+        border-radius: 20px;
         background-color: #FFFFFF;
         margin-bottom: 12px;
     }

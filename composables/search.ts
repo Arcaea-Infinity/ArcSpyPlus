@@ -50,7 +50,21 @@ export interface Bast30 {
     best30_avg: number,
     recent10_avg: number,
     account_info: account_info;
-    best30_list: any[]
+    best30_list: {
+        score: number;
+        health: number;
+        rating: number;
+        song_id: string,
+        modifier: number;
+        difficulty: number;
+        clear_type: number;
+        best_clear_type: number;
+        time_played: number;
+        near_count: number;
+        miss_count: number;
+        perfect_count: number;
+        shiny_perfect_count: number;
+    }[];
 }
 
 export default class search_Account {
@@ -126,49 +140,55 @@ export default class search_Account {
         }
     }
     public async getUserB30() {
-        const { data: result } = await useAsyncData<RequestBox<Bast30>>(
-            "account_best30",
-            () => $fetch(`botarcapi/user/best30`,
+        try {
+
+            const { data: result } = await useAsyncData<RequestBox<Bast30>>(
+                "account_best30",
+                () => $fetch(`botarcapi/user/best30`,
+                    {
+                        params: {
+                            user: this.ArcId.replaceAll(" ", ""),
+                            recent: 7
+                        },
+                        retry: 3,
+                        baseURL: "https://server.awbugl.top/",
+                        async onRequestError(e) {
+                            console.log(e, "请求错误")
+                        },
+                        headers: {
+                            "user-agent": "ArcSpy3S2D2G1L2JB2F0"
+                        }
+                    }),
                 {
-                    params: {
-                        user: this.ArcId.replaceAll(" ", ""),
-                        recent: 7
-                    },
-                    retry: 3,
-                    baseURL: "https://server.awbugl.top/",
-                    async onRequestError(e) {
-                        console.log(e, "请求错误")
-                    },
-                    headers: {
-                        "user-agent": "ArcSpy3S2D2G1L2JB2F0"
-                    }
-                }),
-            {
-                lazy: false,
-                server: true,
-                // default: () => {
-                //     return {
-                //         status: -3,
-                //         message: "我是默认返回",
-                //         content: {
-                //             account_info: {
-                //                 code: "1919",
-                //                 name: "查询失败",
-                //                 user_id: 114514,
-                //                 is_mutual: false,
-                //                 is_char_uncapped_override: false,
-                //                 is_char_uncapped: false,
-                //                 is_skill_sealed: false,
-                //                 rating: 616,
-                //                 join_date: new Date().toLocaleString().replaceAll("/", "-"),
-                //                 character: 0,
-                //             },
-                //             recent_score: [],
-                //         },
-                //     }
-                // }
-            });
-        console.log(result.value.content.best30_list, 'B30记录')
+                    lazy: false,
+                    server: true,
+                    // default: () => {
+                    //     return {
+                    //         status: -3,
+                    //         message: "我是默认返回",
+                    //         content: {
+                    //             account_info: {
+                    //                 code: "1919",
+                    //                 name: "查询失败",
+                    //                 user_id: 114514,
+                    //                 is_mutual: false,
+                    //                 is_char_uncapped_override: false,
+                    //                 is_char_uncapped: false,
+                    //                 is_skill_sealed: false,
+                    //                 rating: 616,
+                    //                 join_date: new Date().toLocaleString().replaceAll("/", "-"),
+                    //                 character: 0,
+                    //             },
+                    //             recent_score: [],
+                    //         },
+                    //     }
+                    // }
+                });
+            return ref(result.value.content.best30_list)
+
+        } catch (error) {
+
+        }
     }
     private AccountStatus_notFound(result: SearchValue) {
         this.Status = "failed";
