@@ -16,11 +16,13 @@
             </header>
             <main class="mainPage-main">
                 <form class="searchBox" :class="{ 'searchBoxError': showSearchError }" action="" @submit.prevent>
-                    <img height="28" width="28" draggable="false" src="@/assets/img/qrCode.webp" class="qrCode" alt="图片加载失败" />
+                    <img height="28" width="28" draggable="false" src="@/assets/img/qrCode.webp" class="qrCode"
+                        alt="图片加载失败" />
                     <input type="search" v-model="search" id="search" placeholder="Search your ArcID"
                         @keyup.enter="SearchValue()">
                     <div style="height:100%" class="align-center" @click="SearchValue()">
-                        <img width="21.59" height="21.59" draggable="false" src="@/assets/img/search_icon.webp" class="searchIcon" alt="图片加载失败" />
+                        <img width="21.59" height="21.59" draggable="false" src="@/assets/img/search_icon.webp"
+                            class="searchIcon" alt="图片加载失败" />
                     </div>
                 </form>
                 <aside class="search-leaderBoard-box">
@@ -40,6 +42,7 @@
                     <span class="iconfont spy-github"></span>
                 </a>
             </footer>
+
         </div>
         <!-- </div> -->
     </NuxtLayout>
