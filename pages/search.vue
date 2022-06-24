@@ -38,6 +38,9 @@
                 </li>
             </ul>
         </main>
+        <aside class="account-char"
+            :style="`background-image: url(https://server.awbugl.top/botarcapi/assets/char?partner=${userDetali.character});`">
+        </aside>
     </NuxtLayout>
 </template>
 
@@ -129,6 +132,8 @@ function updateSwitch(e: number) {
 .searchMask {
     flex: 1;
     background-color: rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 10;
 }
 
 .switchBtn {
@@ -172,5 +177,13 @@ function updateSwitch(e: number) {
         transform: translateY(-23%) translate(-15%);
     }
 
+}
+
+.account-char {
+    position: relative;
+    z-index: 3;
+    background-size: cover;
+    background-position: 0 20px;
+    opacity: 0.4;
 }
 </style>
