@@ -1,4 +1,5 @@
 import { Ref } from "vue";
+import { getAccountPPTBorder } from "~~/utils/utils";
 
 export type ResultCallBack = (result: SearchValue) => void;
 
@@ -38,6 +39,7 @@ export interface account_info {
     is_char_uncapped: boolean;
     is_skill_sealed: boolean;
     rating: number;
+    rating_bg?: string;
     join_date: number | string;
     character: number;
 }
@@ -128,9 +130,14 @@ export default class search_Account {
                 }
             );
             if (result.value) {
-                const Back = this.searchResultBack.get(result.value.status);
-                if (Back) Back.call(this, result.value.content);
-                return
+                try {
+                    result.value.content.account_info.rating_bg = await getAccountPPTBorder(result.value.content.account_info.rating);
+                } catch (error) {
+                    console.log("因为搜索ptt爆出来的error")
+                } finally {
+                    const Back = this.searchResultBack.get(result.value.status);
+                    if (Back) Back.call(this, result.value.content);
+                }
             } else {
                 this.Status = "failed"
                 return
@@ -162,27 +169,6 @@ export default class search_Account {
                 {
                     lazy: false,
                     server: true,
-                    // default: () => {
-                    //     return {
-                    //         status: -3,
-                    //         message: "我是默认返回",
-                    //         content: {
-                    //             account_info: {
-                    //                 code: "1919",
-                    //                 name: "查询失败",
-                    //                 user_id: 114514,
-                    //                 is_mutual: false,
-                    //                 is_char_uncapped_override: false,
-                    //                 is_char_uncapped: false,
-                    //                 is_skill_sealed: false,
-                    //                 rating: 616,
-                    //                 join_date: new Date().toLocaleString().replaceAll("/", "-"),
-                    //                 character: 0,
-                    //             },
-                    //             recent_score: [],
-                    //         },
-                    //     }
-                    // }
                 });
             return ref(result.value.content.best30_list)
 

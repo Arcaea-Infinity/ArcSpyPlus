@@ -11,10 +11,14 @@
                         Join Date {{ new Date(userDetali?.join_date).toLocaleDateString().replaceAll("/", "-") }}
                     </div>
                 </div>
-                <div>
-
-                    {{ getAccountPPTBorder(userDetali?.rating) }}
-                    PPT:{{ insertStr(`${userDetali?.rating}`, 2, ".") }}
+                <div class="account_PPT">
+                    <img :src="userDetali.rating_bg" alt="PPT图片加载失败" />
+                    <span style="font-size:26px">
+                        {{ insertStr(`${userDetali?.rating}`, 2, ".").slice(0, 2) }}
+                    </span>
+                    <span>
+                        {{ insertStr(`${userDetali?.rating}`, 2, ".").slice(2) }}
+                    </span>
                 </div>
             </header>
             <div class="switchType" :class="currentswitch === 0 ? 'switchBtnCurrent-left' : 'switchBtnCurrent-right'">
@@ -23,8 +27,13 @@
                 <div class="switchBtn acount_B30" :class="{ switchBtnCurrent: currentswitch === 1 }"
                     @click="updateSwitch(1)">BEST30</div>
             </div>
-            <ul class="songList">
+            <ul class="songList" v-show="currentswitch === 0">
                 <li class="song" v-for="item in songList" :key="item.time_played">
+                    {{ item.song_id }}
+                </li>
+            </ul>
+            <ul class="songList" v-show="currentswitch === 1">
+                <li class="song" v-for="item in B30" :key="item.time_played">
                     {{ item.song_id }}
                 </li>
             </ul>
@@ -34,7 +43,6 @@
 
 <script lang="ts" setup>
 import search_Account from "~~/composables/search";
-import { getAccountPPTBorder } from "@/utils/utils"
 const route = useRoute();
 const search = new search_Account(route.query.ArcId as string);
 await search.onCreated()
@@ -142,5 +150,27 @@ function updateSwitch(e: number) {
     margin-right: 12px;
 }
 
-// .acount_B30 {}
+.account_PPT {
+    position: relative;
+    transform: translateY(30%);
+
+    span {
+        position: relative;
+        z-index: 10;
+        color: #FFF;
+        -webkit-text-stroke: 1px #42406E;
+        font-size: 18px;
+        font-family: "Exo";
+        font-weight: 600;
+    }
+
+    img {
+        position: absolute;
+        z-index: 5;
+        width: 20vmin;
+        object-fit: cover;
+        transform: translateY(-23%) translate(-15%);
+    }
+
+}
 </style>
