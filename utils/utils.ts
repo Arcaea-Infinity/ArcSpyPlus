@@ -1,7 +1,8 @@
+
 function colorfulImg(img) {
     if (document) {
         // working
-        
+
         // let canvas = document.createElement('canvas'),
         //     context = canvas.getContext && canvas.getContext('2d'),
         //     height, width, length, data,
@@ -25,5 +26,15 @@ function colorfulImg(img) {
         // rgb.g = ~~(rgb.g / count);
         // rgb.b = ~~(rgb.b / count);
         // return rgb;
+    }
+}
+
+export async function getAccountPPTBorder(ppt: number) {
+    console.log(ppt)
+    const modules = import.meta.glob('../assets/img/account/rating/*.png');
+    for (const path in modules) {
+        modules[path]().then((mod) => {
+            console.log(path, mod)
+        })
     }
 }

@@ -12,14 +12,16 @@
                     </div>
                 </div>
                 <div>
+
+                    {{ getAccountPPTBorder(userDetali?.rating) }}
                     PPT:{{ insertStr(`${userDetali?.rating}`, 2, ".") }}
                 </div>
             </header>
-            <div class="switchType">
-                <div class="switchBtn account_info" @click="updateSwitch(0)"
-                    :class="{ switchBtnCurrent: currentswitch === 0 }">RECENT</div>
-                <div class="switchBtn acount_B30" @click="updateSwitch(1)"
-                    :class="{ switchBtnCurrent: currentswitch === 1 }">BEST30</div>
+            <div class="switchType" :class="currentswitch === 0 ? 'switchBtnCurrent-left' : 'switchBtnCurrent-right'">
+                <div class="switchBtn account_info" :class="{ switchBtnCurrent: currentswitch === 0 }"
+                    @click="updateSwitch(0)">RECENT</div>
+                <div class="switchBtn acount_B30" :class="{ switchBtnCurrent: currentswitch === 1 }"
+                    @click="updateSwitch(1)">BEST30</div>
             </div>
             <ul class="songList">
                 <li class="song" v-for="item in songList" :key="item.time_played">
@@ -32,7 +34,7 @@
 
 <script lang="ts" setup>
 import search_Account from "~~/composables/search";
-
+import { getAccountPPTBorder } from "@/utils/utils"
 const route = useRoute();
 const search = new search_Account(route.query.ArcId as string);
 await search.onCreated()
@@ -51,10 +53,38 @@ function updateSwitch(e: number) {
 </script>
 <style lang="scss" scoped>
 .switchType {
-    width: 100%;
+    width: auto;
+    margin: 0 auto;
     display: flex;
     justify-content: center;
     margin-bottom: 32px;
+    position: relative;
+
+    &::after {
+        content: "";
+        position: absolute;
+        width: calc(50% - 6px);
+        height: 100%;
+        border-radius: 20px;
+        box-shadow: 5px 6px 3px 0 hsl(0deg 0% 57% / 40%);
+        background-color: #FFF;
+        transition: left 0.19s, transform 0.19s;
+    }
+}
+
+.switchBtnCurrent-left {
+    &::after {
+        left: 0;
+    }
+}
+
+.switchBtnCurrent-right {
+    &::after {
+        // width: 50% !important;
+        left: 100%;
+        transform: translateX(-100%);
+        // right: 0;
+    }
 }
 
 .songList {
@@ -100,17 +130,17 @@ function updateSwitch(e: number) {
     padding: 7px 20px;
     font-weight: 500;
     cursor: pointer;
+    position: relative;
+    z-index: 1;
 }
 
 .switchBtnCurrent {
     color: #5C5997 !important;
-    background-color: #ffffff !important;
-    box-shadow: 5px 6px 3px 0 rgba(145, 145, 145, 0.4);
 }
 
 .account_info {
     margin-right: 12px;
 }
 
-.acount_B30 {}
+// .acount_B30 {}
 </style>
