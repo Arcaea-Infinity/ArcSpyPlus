@@ -28,11 +28,16 @@ function colorfulImg(img) {
         // return rgb;
     }
 }
-
+const PPTborder = []
 export async function getAccountPPTBorder(ppt: number) {
-    console.log(ppt)
+    console.log(ppt, '我是用户ppt')
     const modules = import.meta.glob('../assets/img/account/rating/*.png');
+    // Object.keys(modules).every()
+
     for (const path in modules) {
+        // if(){
+
+        // }
         modules[path]().then((mod) => {
             console.log(path, mod)
         })
