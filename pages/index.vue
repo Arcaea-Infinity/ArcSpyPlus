@@ -50,6 +50,7 @@
 </template>
 
 <script lang="ts" setup>
+import nProgress from 'nprogress';
 import { UserHistory } from '~~/composables/search';
 // import img from "../assets/img/mainPage_bg.png?raw"
 // console.log(img)
@@ -63,7 +64,7 @@ onMounted(() => {
     }
 })
 async function SearchValue(e?: string) {
-    console.log("开始查询咯")
+    nProgress.start()
     const value = (e ?? search.value).replaceAll(" ", "")
     if (typeof value === "string" && value.length > 0) {
         try {
@@ -101,7 +102,16 @@ useHead({
     ],
     htmlAttrs: {
         lang: "zh-cn"
-    }
+    },
+    link: [
+        {
+            href: "https://unpkg.com/nprogress@0.2.0/nprogress.css"
+        }
+    ],
+    script: [{
+        src: "https://unpkg.com/nprogress@0.2.0/nprogress.js",
+        defer: "true",
+    }]
 })
 </script>
 <style lang="scss" scoped>

@@ -61,6 +61,26 @@ function insertStr(soure: string, start: number, newStr: string) {
 function updateSwitch(e: number) {
     currentswitch.value = e
 }
+useHead({
+    titleTemplate: 'ArcSpy+',
+    viewport: 'width=device-width,user-scalable=no, initial-scale=1, maximum-scale=1',
+    charset: 'utf-8',
+    meta: [
+        { name: 'description', content: '一个简单的arc查分网站' }
+    ],
+    htmlAttrs: {
+        lang: "zh-cn"
+    },
+    link: [
+        {
+            href: "https://unpkg.com/nprogress@0.2.0/nprogress.css"
+        }
+    ],
+    script: [{
+        src: "https://unpkg.com/nprogress@0.2.0/nprogress.js",
+        defer: "true",
+    }]
+})
 </script>
 <style lang="scss" scoped>
 .switchType {
@@ -180,10 +200,12 @@ function updateSwitch(e: number) {
 }
 
 .account-char {
-    position: relative;
+    position: absolute;
     z-index: 3;
     background-size: cover;
     background-position: 0 20px;
     opacity: 0.4;
+    width: 100%;
+    height: 100%;
 }
 </style>
