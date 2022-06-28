@@ -185,10 +185,10 @@ export default class search_Account {
         this.account_Info = result
         return
     }
-    public getAccount_info(): Ref<SearchValue["account_info"]> {
-        return ref(this.account_Info.account_info)
+    public getAccount_info(): SearchValue["account_info"] {
+        return this.account_Info.account_info
     }
-    public getSongList(): Ref<SearchValue["recent_score"]> {
-        return ref(this.account_Info.recent_score || [])
+    public getSongList(): SearchValue["recent_score"] {
+        return this.account_Info.recent_score || []
     }
 }

@@ -1,15 +1,12 @@
 
 <template>
-    <!-- <div class="mainPage"> -->
     <NuxtLayout name="page">
-        <!-- <div> -->
         <MainPageLineBg></MainPageLineBg>
         <div class="mainPage-fullPage">
             <header class="mainPage-header">
                 <h1 class="title">
                     arcSpy+
                     <img draggable="false" src="@/assets/img/title.svg" alt="title">
-                    <!-- <MainPageFontP></MainPageFontP> -->
                 </h1>
                 <h2 class="description">The next generation score
                     profiler for Arcaea</h2>
@@ -42,7 +39,6 @@
                     <span class="iconfont spy-github"></span>
                 </a>
             </footer>
-
         </div>
     </NuxtLayout>
 </template>

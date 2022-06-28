@@ -41,6 +41,7 @@
         <aside class="account-char"
             :style="`background-image: url(https://server.awbugl.top/botarcapi/assets/char?partner=${userDetali.character});`">
         </aside>
+     
     </NuxtLayout>
 </template>
 
