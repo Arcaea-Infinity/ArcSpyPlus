@@ -1,15 +1,12 @@
 
 <template>
-    <!-- <div class="mainPage"> -->
     <NuxtLayout name="page">
-        <!-- <div> -->
         <MainPageLineBg></MainPageLineBg>
         <div class="mainPage-fullPage">
             <header class="mainPage-header">
                 <h1 class="title">
                     arcSpy+
                     <img draggable="false" src="@/assets/img/title.svg" alt="title">
-                    <!-- <MainPageFontP></MainPageFontP> -->
                 </h1>
                 <h2 class="description">The next generation score
                     profiler for Arcaea</h2>
@@ -42,15 +39,13 @@
                     <span class="iconfont spy-github"></span>
                 </a>
             </footer>
-
         </div>
-        <!-- </div> -->
     </NuxtLayout>
-    <!-- </div> -->
 </template>
 
 <script lang="ts" setup>
-// import nProgress from 'nprogress';
+import nprogress from "nprogress"
+
 import { UserHistory } from '~~/composables/search';
 // import img from "../assets/img/mainPage_bg.png?raw"
 // console.log(img)
@@ -59,13 +54,14 @@ const showSearchError = ref<boolean>(false);
 const SearchCard = ref<UserHistory[]>([])
 onMounted(() => {
     if (window && window.localStorage) {
+
+        nprogress.configure({ showSpinner: false });
         let userHistory: UserHistory[] | null | string = localStorage.getItem("searchHistory");
         SearchCard.value = userHistory ? JSON.parse(userHistory) as UserHistory[] : [];
     }
 })
 async function SearchValue(e?: string) {
-    
-    // NProgress.start()
+    nprogress.start();
     const value = (e ?? search.value).replaceAll(" ", "")
     if (typeof value === "string" && value.length > 0) {
         try {
@@ -104,15 +100,15 @@ useHead({
     htmlAttrs: {
         lang: "zh-cn"
     },
-    link: [
-        {
-            href: "https://unpkg.com/nprogress@0.2.0/nprogress.css"
-        }
-    ],
-    script: [{
-        src: "https://unpkg.com/nprogress@0.2.0/nprogress.js",
-        defer: "true",
-    }]
+    // link: [
+    //     {
+    //         href: "https://unpkg.com/nprogress@0.2.0/nprogress.css"
+    //     }
+    // ],
+    // script: [{
+    //     src: "https://unpkg.com/nprogress@0.2.0/nprogress.js",
+    //     defer: "true",
+    // }]
 })
 </script>
 <style lang="scss" scoped>

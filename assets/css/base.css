@@ -21,7 +21,12 @@ a {
     font-family: 'Exo';
     src: url('../font/Exo-Regular.ttf') format('truetype');
     font-display: swap;
+}
 
+@font-face {
+    font-family: 'Exo-Medium';
+    src: url('../font/Exo-Medium.ttf') format('truetype');
+    font-display: swap;
 }
 
 @font-face {

@@ -1,4 +1,4 @@
-import { Ref } from "vue";
+import type { Ref } from "vue";
 import { getAccountPPTBorder } from "~~/utils/utils";
 
 export type ResultCallBack = (result: SearchValue) => void;
@@ -92,9 +92,9 @@ export default class search_Account {
                     {
                         params: {
                             user: this.ArcId.replaceAll(" ", ""),
-                            recent: 7
+                            recent: 7,
+                            withsonginfo: true
                         },
-                        retry: 3,
                         baseURL: "https://server.awbugl.top/",
                         async onRequestError(e) {
                             console.log(e, "请求错误")
@@ -131,6 +131,7 @@ export default class search_Account {
             );
             if (result.value) {
                 try {
+                    console.log(result.value.content.account_info, '我是bg')
                     result.value.content.account_info.rating_bg = await getAccountPPTBorder(result.value.content.account_info.rating);
                 } catch (error) {
                     console.log("因为搜索ptt爆出来的error")
@@ -148,16 +149,13 @@ export default class search_Account {
     }
     public async getUserB30() {
         try {
-
-            const { data: result } = await useAsyncData<RequestBox<Bast30>>(
-                "account_best30",
+            const { data: result } = await useAsyncData<RequestBox<Bast30>>("account_best30",
                 () => $fetch(`botarcapi/user/best30`,
                     {
                         params: {
                             user: this.ArcId.replaceAll(" ", ""),
                             recent: 7
                         },
-                        retry: 3,
                         baseURL: "https://server.awbugl.top/",
                         async onRequestError(e) {
                             console.log(e, "请求错误")
@@ -170,8 +168,7 @@ export default class search_Account {
                     lazy: false,
                     server: true,
                 });
-            return ref(result.value.content.best30_list)
-
+            return result.value.content.best30_list
         } catch (error) {
 
         }
@@ -185,10 +182,10 @@ export default class search_Account {
         this.account_Info = result
         return
     }
-    public getAccount_info(): Ref<SearchValue["account_info"]> {
-        return ref(this.account_Info.account_info)
+    public getAccount_info(): SearchValue["account_info"] {
+        return this.account_Info.account_info
     }
-    public getSongList(): Ref<SearchValue["recent_score"]> {
-        return ref(this.account_Info.recent_score || [])
+    public getSongList(): SearchValue["recent_score"] {
+        return this.account_Info.recent_score || []
     }
 }

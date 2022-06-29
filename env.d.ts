@@ -1,4 +1,6 @@
 import Nprocess from "@types/nprogress";
-namespace global{
-interface 
+declare global {
+    interface window {
+        NProgress: Nprocess
+    }
 }

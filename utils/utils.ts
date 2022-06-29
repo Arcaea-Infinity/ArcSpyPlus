@@ -15,14 +15,16 @@ const PPTborder = [
     (ppt: number) => (ppt >= 1100 && ppt < 1220),
     (ppt: number) => (ppt > 1220)]
 export async function getAccountPPTBorder(ppt: number): Promise<string> {
-    console.log(ppt, '我是用户ppt')
-    const modules = import.meta.glob('../assets/img/account/rating/*.png');
+    console.log(ppt, '我是用户ppt');
     const index = PPTborder.findIndex(e => e(ppt));
+    const modules = import.meta.glob('../assets/img/account/rating/*.png');
 
     for (const path in modules) {
         if (path.indexOf(`${index}`) !== -1) {
+            console.log("匹配到用户头像了")
             const mod = await modules[path]();
             return Promise.resolve(mod.default as string)
         }
     }
+    console.log("没匹配到")
 }

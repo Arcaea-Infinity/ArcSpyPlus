@@ -1,15 +1,11 @@
 
 <template>
-    <!-- :style="{ backgroundImage: `url(${bg})` }" -->
     <div class="mainPage">
-        <!-- <img class="mainPage_bg" src="@/assets/img/mainPage_bg.png" alt=""> -->
         <slot></slot>
     </div>
 </template>
 
 <script lang="ts" setup>
-// import { reactive, toRefs, onBeforeMount, onMounted } from 'vue'
-// import { bg } from "@/assets/img/preload"
 </script>
 <style lang="scss" scoped>
 .mainPage {
