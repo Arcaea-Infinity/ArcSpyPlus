@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts" setup>
-import nProgress from 'nprogress';
+// import nProgress from 'nprogress';
 import { UserHistory } from '~~/composables/search';
 // import img from "../assets/img/mainPage_bg.png?raw"
 // console.log(img)
@@ -64,7 +64,8 @@ onMounted(() => {
     }
 })
 async function SearchValue(e?: string) {
-    nProgress.start()
+    
+    // NProgress.start()
     const value = (e ?? search.value).replaceAll(" ", "")
     if (typeof value === "string" && value.length > 0) {
         try {
