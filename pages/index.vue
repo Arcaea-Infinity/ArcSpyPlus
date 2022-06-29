@@ -54,6 +54,7 @@ const showSearchError = ref<boolean>(false);
 const SearchCard = ref<UserHistory[]>([])
 onMounted(() => {
     if (window && window.localStorage) {
+
         nprogress.configure({ showSpinner: false });
         let userHistory: UserHistory[] | null | string = localStorage.getItem("searchHistory");
         SearchCard.value = userHistory ? JSON.parse(userHistory) as UserHistory[] : [];

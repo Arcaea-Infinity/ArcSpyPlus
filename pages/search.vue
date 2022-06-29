@@ -27,21 +27,74 @@
                 <div class="switchBtn acount_B30" :class="{ switchBtnCurrent: currentswitch === 1 }"
                     @click="updateSwitch(1)">BEST30</div>
             </div>
-            <ul class="songList" v-show="currentswitch === 0">
-                <li class="song" v-for="item in songList" :key="item.time_played">
-                    {{ item.song_id }}
-                </li>
-            </ul>
-            <ul class="songList" v-show="currentswitch === 1">
-                <li class="song" v-for="item in B30" :key="item.time_played">
-                    {{ item.song_id }}
-                </li>
-            </ul>
+            <div class="song-carousel" :class="{ 'SongList-B30Show': currentswitch === 1 }">
+                <ul class="songList">
+                    <li class="song" v-for="item in songList" :key="item.time_played">
+                        <span class="songId">{{ item.song_id }}</span>
+                        <div class="song-Line">
+                            <span>
+                                <span class="song-Line-label">PUREs&nbsp;&nbsp;</span>
+                                <span class="song-Line-value">{{ item.perfect_count }}({{ item.shiny_perfect_count
+                                }})</span>
+                            </span>
+                            <span style="margin: 0 auto;">
+                                <span class="song-Line-label">FARs&nbsp;&nbsp;</span>
+                                <span class="song-Line-value">{{ item.near_count }}</span>
+                            </span>
+                        </div>
+                        <div class="song-Line" style="margin-top:20px;margin-bottom: 16px;">
+                            <span>
+                                <span class="song-Line-label">LOSTs&nbsp;&nbsp;</span>
+                                <span class="song-Line-value"> {{ item.miss_count }}</span>
+                            </span>
+                            <span style="margin: 0 auto;">
+                                <span class="song-Line-label">RATING&nbsp;&nbsp;</span>
+                                <span class="song-Line-value">{{ item.rating.toFixed(2) }}</span>
+                            </span>
+                        </div>
+                        <div class="song-footer">
+                            <span class="song-score">{{ item.score }}</span>
+                            <span>{{ item.clear_type }}</span>
+                            <span></span>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="songList">
+                    <li class="song" v-for="item in B30" :key="item.time_played">
+                        <span class="songId">{{ item.song_id }}</span>
+                        <div class="song-Line">
+                            <span>
+                                <span class="song-Line-label">PUREs&nbsp;&nbsp;</span>
+                                <span class="song-Line-value">{{ item.perfect_count }}({{ item.shiny_perfect_count
+                                }})</span>
+                            </span>
+                            <span style="margin: 0 auto;">
+                                <span class="song-Line-label">FARs&nbsp;&nbsp;</span>
+                                <span class="song-Line-value">{{ item.near_count }}</span>
+                            </span>
+                        </div>
+                        <div class="song-Line" style="margin-top:20px;margin-bottom: 16px;">
+                            <span>
+                                <span class="song-Line-label">LOSTs&nbsp;&nbsp;</span>
+                                <span class="song-Line-value"> {{ item.miss_count }}</span>
+                            </span>
+                            <span style="margin: 0 auto;">
+                                <span class="song-Line-label">RATING&nbsp;&nbsp;</span>
+                                <span class="song-Line-value">{{ item.rating.toFixed(2) }}</span>
+                            </span>
+                        </div>
+                        <div class="song-footer">
+                            <span class="song-score">{{ item.score }}</span>
+                            <span>{{ item.clear_type }}</span>
+                            <span></span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </main>
-        <aside class="account-char"
-            :style="`background-image: url(https://server.awbugl.top/botarcapi/assets/char?partner=${userDetali.character});`">
+        <aside class="account-char" :style="{ backgroundImage: `url(${charBg})` }">
         </aside>
-     
+
     </NuxtLayout>
 </template>
 
@@ -49,12 +102,13 @@
 import search_Account from "~~/composables/search";
 const route = useRoute();
 const search = new search_Account(route.query.ArcId as string);
-await search.onCreated()
-const B30 = await search.getUserB30();
-const userDetali = search.getAccount_info()
-const songList = search.getSongList();
 const currentswitch = ref<number>(0)
-
+const charBg = ref<string>("");
+async function getBgURL(sum: number, is_char_uncapped: boolean) {
+    const modules = import.meta.glob("../assets/img/account/char/*.png");
+    const data = Object.keys(modules).find(e => e.indexOf(`${sum}${is_char_uncapped ? "u" : ""}`) !== -1);
+    charBg.value = (await modules[data]()).default
+}
 function insertStr(soure: string, start: number, newStr: string) {
     let newSoure = soure.split("").reverse().join("")
     return `${newSoure.slice(0, start)}${newStr}${newSoure.slice(start)}`.split("").reverse().join("")
@@ -82,6 +136,11 @@ useHead({
         defer: "true",
     }]
 })
+await search.onCreated()
+const B30 = await search.getUserB30();
+const userDetali = search.getAccount_info()
+const songList = search.getSongList();
+getBgURL(userDetali.character, userDetali.is_char_uncapped)
 </script>
 <style lang="scss" scoped>
 .switchType {
@@ -130,6 +189,16 @@ useHead({
         border-radius: 20px;
         background-color: #FFFFFF;
         margin-bottom: 12px;
+        display: flex;
+        flex-direction: column;
+        padding: 16px 20px;
+
+        .songId {
+            font-family: "Exo-Medium";
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
     }
 
     &::-webkit-scrollbar {
@@ -208,5 +277,42 @@ useHead({
     opacity: 0.4;
     width: 100%;
     height: 100%;
+}
+
+.song-carousel {
+    display: flex;
+    width: 200vw;
+    transition: all 0.12s;
+    transform: translateX(0%);
+}
+
+.SongList-B30Show {
+    transform: translateX(-50%);
+}
+
+.song-footer {
+    margin-top: auto;
+
+}
+
+.song-Line {
+    display: flex;
+
+    .song-Line-label {
+        font-size: 12px;
+        font-family: "Exo";
+    }
+
+    .song-Line-value {
+        font-size: 16px;
+        font-family: "Exo";
+    }
+
+}
+
+.song-score {
+    font-size: 30px;
+    font-family: "Exo";
+    margin-right: auto;
 }
 </style>
