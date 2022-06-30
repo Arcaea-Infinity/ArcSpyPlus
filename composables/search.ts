@@ -77,9 +77,6 @@ export default class search_Account {
     constructor(ArcId: string) {
         this.searchResultBack.set(-3, this.AccountStatus_notFound);
         this.searchResultBack.set(0, this.AccountStatus_success);
-        // this.searchResultBack.forEach(e => {
-        //     e = e.bind(that) 不知为何此处不生效
-        // })
         this.ArcId = ArcId
     }
 
@@ -105,7 +102,7 @@ export default class search_Account {
                     }),
                 {
                     lazy: false,
-                    server: true,
+                    server: false,
                     default: () => {
                         return {
                             status: -3,
@@ -166,7 +163,7 @@ export default class search_Account {
                     }),
                 {
                     lazy: false,
-                    server: true,
+                    server: false,
                 });
             return result.value.content.best30_list
         } catch (error) {
@@ -183,9 +180,14 @@ export default class search_Account {
         return
     }
     public getAccount_info(): SearchValue["account_info"] {
-        return this.account_Info.account_info
+        console.log(this.account_Info, this, '查询到的info')
+        return { ...this.account_Info.account_info }
     }
     public getSongList(): SearchValue["recent_score"] {
-        return this.account_Info.recent_score || []
+        return [...this.account_Info.recent_score || []]
+    }
+    public destroy(): void {
+        this.account_Info = null;
+        this.ArcId = null
     }
 }

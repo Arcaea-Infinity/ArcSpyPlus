@@ -1,7 +1,7 @@
 <template>
     <NuxtLayout name="page">
         <main class="searchMask column">
-            <header class="between align-center userInfo">
+            <header class="between align-center userInfo" v-memo>
                 <div class="column ">
                     <div class="userName">{{ userDetali?.name }}</div>
                     <div>
@@ -27,7 +27,7 @@
                 <div class="switchBtn acount_B30" :class="{ switchBtnCurrent: currentswitch === 1 }"
                     @click="updateSwitch(1)">BEST30</div>
             </div>
-            <div class="song-carousel" :class="{ 'SongList-B30Show': currentswitch === 1 }">
+            <div class="song-carousel" :class="{ 'SongList-B30Show': currentswitch === 1 }" v-memo>
                 <ul class="songList">
                     <li class="song" v-for="item in songList" :key="item.time_played">
                         <span class="songId">{{ item.song_id }}</span>
@@ -140,6 +140,7 @@ await search.onCreated()
 const B30 = await search.getUserB30();
 const userDetali = search.getAccount_info()
 const songList = search.getSongList();
+search.destroy();
 getBgURL(userDetali.character, userDetali.is_char_uncapped)
 </script>
 <style lang="scss" scoped>

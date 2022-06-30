@@ -2,7 +2,7 @@
 <template>
     <NuxtLayout name="page">
         <MainPageLineBg></MainPageLineBg>
-        <div class="mainPage-fullPage">
+        <div class="mainPage-fullPage" v-memo>
             <header class="mainPage-header">
                 <h1 class="title">
                     arcSpy+
@@ -12,7 +12,7 @@
                     profiler for Arcaea</h2>
             </header>
             <main class="mainPage-main">
-                <form class="searchBox" :class="{ 'searchBoxError': showSearchError }" action="" @submit.prevent>
+                <form class="searchBox" v-memo :class="{ 'searchBoxError': showSearchError }" action="" @submit.prevent>
                     <img height="28" width="28" draggable="false" src="@/assets/img/qrCode.webp" class="qrCode"
                         alt="图片加载失败" />
                     <input type="search" v-model="search" id="search" placeholder="Search your ArcID"
@@ -31,7 +31,7 @@
                     </ul>
                 </aside>
             </main>
-            <footer class="mainPage-footer">
+            <footer class="mainPage-footer" v-memo>
                 <span id="arcspy-version">
                     Build v0.1.041221
                 </span>
