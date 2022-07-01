@@ -30,32 +30,38 @@
             <div class="song-carousel" :class="{ 'SongList-B30Show': currentswitch === 1 }" v-memo>
                 <ul class="songList">
                     <li class="song" v-for="item in songList" :key="item.time_played">
-                        <span class="songId">{{ item.song_id }}</span>
-                        <div class="song-Line">
-                            <span>
-                                <span class="song-Line-label">PUREs&nbsp;&nbsp;</span>
-                                <span class="song-Line-value">{{ item.perfect_count }}({{ item.shiny_perfect_count
-                                }})</span>
-                            </span>
-                            <span style="margin: 0 auto;">
-                                <span class="song-Line-label">FARs&nbsp;&nbsp;</span>
-                                <span class="song-Line-value">{{ item.near_count }}</span>
-                            </span>
-                        </div>
-                        <div class="song-Line" style="margin-top:20px;margin-bottom: 16px;">
-                            <span>
-                                <span class="song-Line-label">LOSTs&nbsp;&nbsp;</span>
-                                <span class="song-Line-value"> {{ item.miss_count }}</span>
-                            </span>
-                            <span style="margin: 0 auto;">
-                                <span class="song-Line-label">RATING&nbsp;&nbsp;</span>
-                                <span class="song-Line-value">{{ item.rating.toFixed(2) }}</span>
-                            </span>
-                        </div>
-                        <div class="song-footer">
-                            <span class="song-score">{{ item.score }}</span>
-                            <span>{{ item.clear_type }}</span>
-                            <span></span>
+                        <div class="song">
+                            <span class="songId">{{ item.song_id }}</span>
+                            <div class="song-Line">
+                                <span>
+                                    <span class="song-Line-label">PUREs&nbsp;&nbsp;</span>
+                                    <span class="song-Line-value">{{ item.perfect_count }}({{ item.shiny_perfect_count
+                                    }})</span>
+                                </span>
+                                <span style="margin: 0 auto;">
+                                    <span class="song-Line-label">FARs&nbsp;&nbsp;</span>
+                                    <span class="song-Line-value">{{ item.near_count }}</span>
+                                </span>
+                            </div>
+                            <div class="song-Line" style="margin-top:20px;margin-bottom: 16px;">
+                                <span>
+                                    <span class="song-Line-label">LOSTs&nbsp;&nbsp;</span>
+                                    <span class="song-Line-value"> {{ item.miss_count }}</span>
+                                </span>
+                                <span style="margin: 0 auto;">
+                                    <span class="song-Line-label">RATING&nbsp;&nbsp;</span>
+                                    <span class="song-Line-value">{{ item.rating.toFixed(2) }}</span>
+                                </span>
+                            </div>
+                            <div class="song-footer">
+                                <span class="song-score">{{ item.score }}</span>
+                                <span>
+                                    <img :src="item.songGrade_bg" alt="" />
+                                </span>
+                                <span>
+                                    <img :src="item.songLevel_bg" alt="" />
+                                </span>
+                            </div>
                         </div>
                     </li>
                 </ul>
@@ -85,8 +91,12 @@
                         </div>
                         <div class="song-footer">
                             <span class="song-score">{{ item.score }}</span>
-                            <span>{{ item.clear_type }}</span>
-                            <span></span>
+                            <span>
+                                <img :src="item.songGrade_bg" alt="" />
+                            </span>
+                            <span>
+                                <img :src="item.songLevel_bg" alt="" />
+                            </span>
                         </div>
                     </li>
                 </ul>
@@ -116,6 +126,14 @@ function insertStr(soure: string, start: number, newStr: string) {
 function updateSwitch(e: number) {
     currentswitch.value = e
 }
+
+await search.onCreated()
+const B30 = await search.getUserB30();
+const userDetali = search.getAccount_info()
+const songList = search.getSongList();
+console.log("查分完毕")
+await search.destroy();
+getBgURL(userDetali.character, userDetali.is_char_uncapped)
 useHead({
     titleTemplate: 'ArcSpy+',
     viewport: 'width=device-width,user-scalable=no, initial-scale=1, maximum-scale=1',
@@ -136,12 +154,6 @@ useHead({
         defer: "true",
     }]
 })
-await search.onCreated()
-const B30 = await search.getUserB30();
-const userDetali = search.getAccount_info()
-const songList = search.getSongList();
-search.destroy();
-getBgURL(userDetali.character, userDetali.is_char_uncapped)
 </script>
 <style lang="scss" scoped>
 .switchType {
@@ -186,7 +198,7 @@ getBgURL(userDetali.character, userDetali.is_char_uncapped)
     padding: 0px 32px;
 
     .song {
-        height: 30%;
+        min-height: 30%;
         border-radius: 20px;
         background-color: #FFFFFF;
         margin-bottom: 12px;
