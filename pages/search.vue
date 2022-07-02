@@ -185,7 +185,7 @@ getBgURL(userDetali.character, userDetali.is_char_uncapped)
     padding: 0px 32px;
 
     .song {
-        height: 30%;
+        // height: 30%;
         border-radius: 20px;
         background-color: #FFFFFF;
         margin-bottom: 12px;
