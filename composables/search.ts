@@ -1,5 +1,5 @@
 import type { Ref } from "vue";
-import { getAccountPPTBorder } from "~~/utils/utils";
+import { getAccountPPTBorder, getAccountSongLevel, getAccountSongGrade } from "~~/utils/utils";
 
 export type ResultCallBack = (result: SearchValue) => void;
 
@@ -18,6 +18,8 @@ export interface RecentScoreType {
     difficulty: number;
     clear_type: number;
     best_clear_type: number;
+    songLevel_bg?: string; // 用户游玩得分标准
+    songGrade_bg?: string; // 用户游玩歌曲评级
     time_played: number;
     near_count: number;
     miss_count: number;
@@ -39,7 +41,7 @@ export interface account_info {
     is_char_uncapped: boolean;
     is_skill_sealed: boolean;
     rating: number;
-    rating_bg?: string;
+    rating_bg?: string; // 用户header背景图
     join_date: number | string;
     character: number;
 }
@@ -52,21 +54,7 @@ export interface Bast30 {
     best30_avg: number,
     recent10_avg: number,
     account_info: account_info;
-    best30_list: {
-        score: number;
-        health: number;
-        rating: number;
-        song_id: string,
-        modifier: number;
-        difficulty: number;
-        clear_type: number;
-        best_clear_type: number;
-        time_played: number;
-        near_count: number;
-        miss_count: number;
-        perfect_count: number;
-        shiny_perfect_count: number;
-    }[];
+    best30_list: RecentScoreType[];
 }
 
 export default class search_Account {
@@ -77,9 +65,6 @@ export default class search_Account {
     constructor(ArcId: string) {
         this.searchResultBack.set(-3, this.AccountStatus_notFound);
         this.searchResultBack.set(0, this.AccountStatus_success);
-        // this.searchResultBack.forEach(e => {
-        //     e = e.bind(that) 不知为何此处不生效
-        // })
         this.ArcId = ArcId
     }
 
@@ -96,9 +81,6 @@ export default class search_Account {
                             withsonginfo: true
                         },
                         baseURL: "https://server.awbugl.top/",
-                        async onRequestError(e) {
-                            console.log(e, "请求错误")
-                        },
                         headers: {
                             "user-agent": "ArcSpy3S2D2G1L2JB2F0"
                         }
@@ -131,8 +113,14 @@ export default class search_Account {
             );
             if (result.value) {
                 try {
-                    console.log(result.value.content.account_info, '我是bg')
-                    result.value.content.account_info.rating_bg = await getAccountPPTBorder(result.value.content.account_info.rating);
+                    if (result.value.status === 0) {
+                        result.value.content.account_info.rating_bg = await getAccountPPTBorder(result.value.content.account_info.rating);
+                        for (let i = 0; i < result.value.content.recent_score.length; i++) {
+                            const e = result.value.content.recent_score[i]
+                            e.songLevel_bg = await getAccountSongLevel(e.score);
+                            e.songGrade_bg = await getAccountSongGrade(e.clear_type);
+                        }
+                    }
                 } catch (error) {
                     console.log("因为搜索ptt爆出来的error")
                 } finally {
@@ -157,9 +145,6 @@ export default class search_Account {
                             recent: 7
                         },
                         baseURL: "https://server.awbugl.top/",
-                        async onRequestError(e) {
-                            console.log(e, "请求错误")
-                        },
                         headers: {
                             "user-agent": "ArcSpy3S2D2G1L2JB2F0"
                         }
@@ -168,6 +153,11 @@ export default class search_Account {
                     lazy: false,
                     server: true,
                 });
+            for (let i = 0; i < result.value.content.best30_list.length; i++) {
+                const e = result.value.content.best30_list[i]
+                e.songLevel_bg = await getAccountSongLevel(e.score);
+                e.songGrade_bg = await getAccountSongGrade(e.clear_type);
+            }
             return result.value.content.best30_list
         } catch (error) {
 
@@ -183,9 +173,13 @@ export default class search_Account {
         return
     }
     public getAccount_info(): SearchValue["account_info"] {
-        return this.account_Info.account_info
+        return { ...this.account_Info.account_info }
     }
     public getSongList(): SearchValue["recent_score"] {
-        return this.account_Info.recent_score || []
+        return [...this.account_Info.recent_score || []]
+    }
+    public async destroy(): Promise<void> {
+        this.account_Info = null;
+        this.ArcId = null
     }
 }
