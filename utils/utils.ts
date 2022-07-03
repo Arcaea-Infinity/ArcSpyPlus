@@ -1,9 +1,30 @@
+import type { RecentScoreType } from "~~/composables/search";
 
-function colorfulImg(img: string) {
-    const canvas = document.createElement("canvas");
-    canvas.width = 1;
-    canvas.height = 1
-    const ctx = canvas.getContext("2d");
+export async function colorfulImg(img: any | HTMLImageElement, item: RecentScoreType) {
+    return new Promise((resolve, reject) => {
+        if (!(img instanceof HTMLImageElement)) reject(false);
+        const newImg = new Image();
+        newImg.src = img.src; // 添加图片地址
+        newImg.crossOrigin = "Anonymous"; // 跨域请求
+        newImg.width = 1; // 压缩图片体积
+        newImg.height = 1;
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d"); // 构建canvas
+        newImg.addEventListener("load", _ => {
+            canvas.width = newImg.width;
+            canvas.height = newImg.height; //canvas压缩大小到1px
+            ctx.drawImage(newImg, 0, 0); // 图片绘制到canvas
+            const data = ctx.getImageData(0, 0, 1, 1).data; // 获取原始canvas像素数据
+            item.theme_color = `rgb(${data[0]},${data[1]},${data[2]})`; // 结束
+            console.log(`${item.song_id} is rgb: %c   `, `background:${item.theme_color}`)
+            resolve({
+                r: data[0],
+                g: data[1],
+                b: data[2]
+            })
+        })
+
+    })
 
 }
 const PPTborder = [

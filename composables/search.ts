@@ -20,6 +20,7 @@ export interface RecentScoreType {
     best_clear_type: number;
     songLevel_bg?: string; // 用户游玩得分标准
     songGrade_bg?: string; // 用户游玩歌曲评级
+    theme_color?: string; // 主题色
     time_played: number;
     near_count: number;
     miss_count: number;

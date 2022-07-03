@@ -30,7 +30,13 @@
             <div class="song-carousel" :class="{ 'SongList-B30Show': currentswitch === 1 }" v-memo>
                 <ul class="songList">
                     <li class="song" v-for="item in songList" :key="item.time_played">
-                        <div class="song">
+                        <div class="songCard-BgBox">
+                            <div class="songCard-bg-shadowBox"></div>
+                            <div class="songCard-bg-shadowBox-right"></div>
+                            <img class="songCard-Bg" :ref="(e) => colorfulImg(e, item)"
+                                :src="`https://server.awbugl.top/botarcapi/assets/song?songid=${item.song_id}`" alt="">
+                        </div>
+                        <div class="songCard">
                             <span class="songId">{{ item.song_id }}</span>
                             <div class="song-Line">
                                 <span>
@@ -38,7 +44,7 @@
                                     <span class="song-Line-value">{{ item.perfect_count }}({{ item.shiny_perfect_count
                                     }})</span>
                                 </span>
-                                <span style="margin: 0 auto;">
+                                <span style="margin-left:  auto;margin-right: 10%;">
                                     <span class="song-Line-label">FARs&nbsp;&nbsp;</span>
                                     <span class="song-Line-value">{{ item.near_count }}</span>
                                 </span>
@@ -48,55 +54,53 @@
                                     <span class="song-Line-label">LOSTs&nbsp;&nbsp;</span>
                                     <span class="song-Line-value"> {{ item.miss_count }}</span>
                                 </span>
-                                <span style="margin: 0 auto;">
+                                <span style="margin-left:  auto;margin-right: 10%;">
                                     <span class="song-Line-label">RATING&nbsp;&nbsp;</span>
                                     <span class="song-Line-value">{{ item.rating.toFixed(2) }}</span>
                                 </span>
                             </div>
                             <div class="song-footer">
                                 <span class="song-score">{{ item.score }}</span>
-                                <span>
-                                    <img :src="item.songGrade_bg" alt="" />
-                                </span>
-                                <span>
-                                    <img :src="item.songLevel_bg" alt="" />
-                                </span>
+                                <img class="song-png" :src="item.songGrade_bg" alt="" />
+                                <img class="song-score-png" :src="item.songLevel_bg" alt="" />
                             </div>
                         </div>
                     </li>
                 </ul>
                 <ul class="songList">
                     <li class="song" v-for="item in B30" :key="item.time_played">
-                        <span class="songId">{{ item.song_id }}</span>
-                        <div class="song-Line">
-                            <span>
-                                <span class="song-Line-label">PUREs&nbsp;&nbsp;</span>
-                                <span class="song-Line-value">{{ item.perfect_count }}({{ item.shiny_perfect_count
-                                }})</span>
-                            </span>
-                            <span style="margin: 0 auto;">
-                                <span class="song-Line-label">FARs&nbsp;&nbsp;</span>
-                                <span class="song-Line-value">{{ item.near_count }}</span>
-                            </span>
+                        <div class="songCard-BgBox">
+                            <img class="songCard-Bg"
+                                :src="`https://server.awbugl.top/botarcapi/assets/song?songid=${item.song_id}`" alt="">
                         </div>
-                        <div class="song-Line" style="margin-top:20px;margin-bottom: 16px;">
-                            <span>
-                                <span class="song-Line-label">LOSTs&nbsp;&nbsp;</span>
-                                <span class="song-Line-value"> {{ item.miss_count }}</span>
-                            </span>
-                            <span style="margin: 0 auto;">
-                                <span class="song-Line-label">RATING&nbsp;&nbsp;</span>
-                                <span class="song-Line-value">{{ item.rating.toFixed(2) }}</span>
-                            </span>
-                        </div>
-                        <div class="song-footer">
-                            <span class="song-score">{{ item.score }}</span>
-                            <span>
-                                <img :src="item.songGrade_bg" alt="" />
-                            </span>
-                            <span>
-                                <img :src="item.songLevel_bg" alt="" />
-                            </span>
+                        <div class="songCard">
+                            <span class="songId">{{ item.song_id }}</span>
+                            <div class="song-Line">
+                                <span>
+                                    <span class="song-Line-label">PUREs&nbsp;&nbsp;</span>
+                                    <span class="song-Line-value">{{ item.perfect_count }}({{ item.shiny_perfect_count
+                                    }})</span>
+                                </span>
+                                <span style="margin-left:  auto;margin-right: 10%;">
+                                    <span class="song-Line-label">FARs&nbsp;&nbsp;</span>
+                                    <span class="song-Line-value">{{ item.near_count }}</span>
+                                </span>
+                            </div>
+                            <div class="song-Line" style="margin-top:20px;margin-bottom: 16px;">
+                                <span>
+                                    <span class="song-Line-label">LOSTs&nbsp;&nbsp;</span>
+                                    <span class="song-Line-value"> {{ item.miss_count }}</span>
+                                </span>
+                                <span style="margin-left:  auto;margin-right: 10%;">
+                                    <span class="song-Line-label">RATING&nbsp;&nbsp;</span>
+                                    <span class="song-Line-value">{{ item.rating.toFixed(2) }}</span>
+                                </span>
+                            </div>
+                            <div class="song-footer">
+                                <span class="song-score">{{ item.score }}</span>
+                                <img class="song-png" :src="item.songGrade_bg" alt="" />
+                                <img class="song-score-png" :src="item.songLevel_bg" alt="" />
+                            </div>
                         </div>
                     </li>
                 </ul>
@@ -110,6 +114,7 @@
 
 <script lang="ts" setup>
 import search_Account from "~~/composables/search";
+import { colorfulImg } from "../utils/utils"
 const route = useRoute();
 const search = new search_Account(route.query.ArcId as string);
 const currentswitch = ref<number>(0)
@@ -197,14 +202,29 @@ useHead({
     height: 72vh;
     padding: 0px 32px;
 
+
+
     .song {
         min-height: 30%;
         border-radius: 20px;
-        background-color: #FFFFFF;
+        // background-color: #FFFFFF;
         margin-bottom: 12px;
         display: flex;
         flex-direction: column;
-        padding: 16px 20px;
+        position: relative;
+        overflow: hidden;
+
+
+
+
+
+        .songCard {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 2;
+            padding: 16px 20px;
+        }
 
         .songId {
             font-family: "Exo-Medium";
@@ -305,7 +325,9 @@ useHead({
 
 .song-footer {
     margin-top: auto;
-
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
 }
 
 .song-Line {
@@ -327,5 +349,70 @@ useHead({
     font-size: 30px;
     font-family: "Exo";
     margin-right: auto;
+}
+
+.song-png {
+    object-fit: cover;
+    width: 10%;
+}
+
+.song-score-png {
+    object-fit: cover;
+    width: 26%;
+}
+
+.songCard-BgBox {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+
+    .songCard-bg-shadowBox {
+        position: absolute;
+        width: 50%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        z-index: 3;
+        background-color: rgba(255, 255, 255, 0.43);
+        // box-shadow: 0px 10px 0px 0px rgba(255, 255, 255, 1);
+        backdrop-filter: blur(3px);
+    }
+
+    .songCard-bg-shadowBox-right {
+        position: absolute;
+        width: 50%;
+        height: 100%;
+        right: 0;
+        top: 0;
+        z-index: 3;
+        background-color: rgba(255, 255, 255, 0.43);
+        box-shadow: 10px 0px 0px 0px rgba(255, 255, 255, 1) inset;
+    }
+
+    .songCard-Bg {
+        position: absolute;
+        object-fit: cover;
+        top: 50%;
+        height: 100%;
+        transform: translateY(-50%);
+        right: 0px;
+        width: 50%;
+        opacity: 0.42;
+        z-index: 2;
+
+        &::before {
+            position: absolute;
+            content: '';
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            border-radius: 50%;
+            box-shadow: 0 0 30px 10px rgba(255, 255, 255, .7) inset;
+        }
+    }
 }
 </style>
