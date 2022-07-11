@@ -368,7 +368,7 @@ useHead({
     top: 0;
     left: 0;
     z-index: 1;
-
+    display: flex;
     .songCard-bg-shadowBox {
         position: absolute;
         width: 50%;

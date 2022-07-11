@@ -16,7 +16,7 @@ export async function colorfulImg(img: any | HTMLImageElement, item: RecentScore
             ctx.drawImage(newImg, 0, 0); // 图片绘制到canvas
             const data = ctx.getImageData(0, 0, 1, 1).data; // 获取原始canvas像素数据
             item.theme_color = `rgb(${data[0]},${data[1]},${data[2]})`; // 结束
-            console.log(`${item.song_id} is rgb: %c   `, `background:${item.theme_color}`)
+            console.log(`${item.theme_color} ${item.song_id} is rgb: %c   `, `background:${item.theme_color}`)
             resolve({
                 r: data[0],
                 g: data[1],
