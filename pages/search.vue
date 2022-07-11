@@ -87,7 +87,7 @@
                                 </span>
                             </div>
                             <div class="song-Line" style="margin-top:20px;margin-bottom: 16px;">
-                                <span>
+                                <span>                                                                          32222222222222222222223222222222212
                                     <span class="song-Line-label">LOSTs&nbsp;&nbsp;</span>
                                     <span class="song-Line-value"> {{ item.miss_count }}</span>
                                 </span>
