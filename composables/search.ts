@@ -2,6 +2,7 @@ import type { Ref } from "vue";
 import { getAccountPPTBorder, getAccountSongLevel, getAccountSongGrade } from "~~/utils/utils";
 
 export type ResultCallBack = (result: SearchValue) => void;
+export type RGB = [number, number, number]
 
 
 export interface UserHistory {
@@ -20,7 +21,7 @@ export interface RecentScoreType {
     best_clear_type: number;
     songLevel_bg?: string; // 用户游玩得分标准
     songGrade_bg?: string; // 用户游玩歌曲评级
-    theme_color?: string; // 主题色
+    theme_color: RGB; // 主题色
     time_played: number;
     near_count: number;
     miss_count: number;
@@ -177,7 +178,7 @@ export default class search_Account {
         return { ...this.account_Info.account_info }
     }
     public getSongList(): SearchValue["recent_score"] {
-        return [...this.account_Info.recent_score || []]
+        return [...this.account_Info.recent_score || []].map(e => { e.theme_color = [255, 255, 255]; return e })
     }
     public async destroy(): Promise<void> {
         this.account_Info = null;
