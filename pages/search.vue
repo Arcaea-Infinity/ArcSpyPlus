@@ -1,9 +1,9 @@
 <template>
     <NuxtLayout name="page">
         <main class="searchMask column">
-            <header class="between align-center userInfo" v-memo>
+            <header class="between align-center userInfo" v-once>
                 <div class="column ">
-                    <div class="userName">{{ userDetali?.name }}</div>
+                    <div class="userName" @click="a">{{ userDetali?.name }}</div>
                     <div>
                         ArcID {{ userDetali?.code }}
                     </div>
@@ -21,28 +21,37 @@
                     </span>
                 </div>
             </header>
-            <div class="switchType" :class="currentswitch === 0 ? 'switchBtnCurrent-left' : 'switchBtnCurrent-right'">
+            <div class="switchType" :class="currentswitch === 0 ? 'switchBtnCurrent-left' : 'switchBtnCurrent-right'"
+                v-once>
                 <div class="switchBtn account_info" :class="{ switchBtnCurrent: currentswitch === 0 }"
                     @click="updateSwitch(0)">RECENT</div>
                 <div class="switchBtn acount_B30" :class="{ switchBtnCurrent: currentswitch === 1 }"
                     @click="updateSwitch(1)">BEST30</div>
             </div>
-            <div class="song-carousel" :class="{ 'SongList-B30Show': currentswitch === 1 }" v-memo>
+            <div class="song-carousel" :class="{ 'SongList-B30Show': currentswitch === 1 }">
                 <ul class="songList">
-                    <li class="song" v-for="item in songList" :key="item.time_played">
+                    <li class="song" :class="`song-${isColorDarkOrLight(item.theme_color)}`" v-for="item in songList"
+                        :key="item.time_played">
                         <div class="songCard-BgBox">
-                            <div class="songCard-bg-shadowBox"></div>
-                            <div class="songCard-bg-shadowBox-right"></div>
-                            <img class="songCard-Bg" :ref="(e) => colorfulImg(e, item)"
-                                :src="`https://server.awbugl.top/botarcapi/assets/song?songid=${item.song_id}`" alt="">
+
+                            <div class="songCard-bg-shadowBox"
+                                :style="item.theme_color ? `background:rgba(${item.theme_color.join(',')},0.54)` : ''">
+                            </div>
+                            <div class="songCard-bg-shadowBox-right"
+                                :style="item.theme_color ? `background:rgba(${item.theme_color.join(',')},0.54)` : ''">
+                                <img :src="`https://server.awbugl.top/botarcapi/assets/song?songid=${item.song_id}`"
+                                    alt="图片加载失败" />
+                            </div>
+
                         </div>
                         <div class="songCard">
                             <span class="songId">{{ item.song_id }}</span>
                             <div class="song-Line">
                                 <span>
                                     <span class="song-Line-label">PUREs&nbsp;&nbsp;</span>
-                                    <span class="song-Line-value">{{ item.perfect_count }}({{ item.shiny_perfect_count
-                                    }})</span>
+                                    <span class="song-Line-value">
+                                        {{ item.perfect_count }}
+                                        ({{ item.shiny_perfect_count }})</span>
                                 </span>
                                 <span style="margin-left:  auto;margin-right: 10%;">
                                     <span class="song-Line-label">FARs&nbsp;&nbsp;</span>
@@ -61,13 +70,13 @@
                             </div>
                             <div class="song-footer">
                                 <span class="song-score">{{ item.score }}</span>
-                                <img class="song-png" :src="item.songGrade_bg" alt="" />
                                 <img class="song-score-png" :src="item.songLevel_bg" alt="" />
+                                <img class="song-png" :src="item.songGrade_bg" alt="" />
                             </div>
                         </div>
                     </li>
                 </ul>
-                <ul class="songList">
+                <!-- <ul class="songList">
                     <li class="song" v-for="item in B30" :key="item.time_played">
                         <div class="songCard-BgBox">
                             <img class="songCard-Bg"
@@ -87,7 +96,7 @@
                                 </span>
                             </div>
                             <div class="song-Line" style="margin-top:20px;margin-bottom: 16px;">
-                                <span>                                                                          32222222222222222222223222222222212
+                                <span>
                                     <span class="song-Line-label">LOSTs&nbsp;&nbsp;</span>
                                     <span class="song-Line-value"> {{ item.miss_count }}</span>
                                 </span>
@@ -103,7 +112,7 @@
                             </div>
                         </div>
                     </li>
-                </ul>
+                </ul> -->
             </div>
         </main>
         <aside class="account-char" :style="{ backgroundImage: `url(${charBg})` }">
@@ -113,16 +122,16 @@
 </template>
 
 <script lang="ts" setup>
-import search_Account from "~~/composables/search";
-import { colorfulImg } from "../utils/utils"
+import search_Account, { RecentScoreType } from "~~/composables/search";
+import { colorfulImg, isColorDarkOrLight } from "../utils/utils";
 const route = useRoute();
 const search = new search_Account(route.query.ArcId as string);
 const currentswitch = ref<number>(0)
-const charBg = ref<string>("");
+const charBg = ref<string>("https://server.awbugl.top/botarcapi/assets/char?partner=1");
+const songImgList = ref<HTMLImageElement[]>([]);
+
 async function getBgURL(sum: number, is_char_uncapped: boolean) {
-    const modules = import.meta.glob("../assets/img/account/char/*.png");
-    const data = Object.keys(modules).find(e => e.indexOf(`${sum}${is_char_uncapped ? "u" : ""}`) !== -1);
-    charBg.value = (await modules[data]()).default
+    charBg.value = `https://server.awbugl.top/botarcapi/assets/char?partner=${sum}&awakened=${is_char_uncapped}`;
 }
 function insertStr(soure: string, start: number, newStr: string) {
     let newSoure = soure.split("").reverse().join("")
@@ -136,8 +145,15 @@ await search.onCreated()
 const B30 = await search.getUserB30();
 const userDetali = search.getAccount_info()
 const songList = search.getSongList();
-console.log("查分完毕")
 await search.destroy();
+const a = () => {
+    console.log("触发点击事件")
+    songList.forEach(e => colorfulImg(`https://server.awbugl.top/botarcapi/assets/song?songid=${e.song_id}`, e))
+
+}
+onMounted(() => {
+    const vConsole = new window.VConsole()
+})
 getBgURL(userDetali.character, userDetali.is_char_uncapped)
 useHead({
     titleTemplate: 'ArcSpy+',
@@ -157,10 +173,15 @@ useHead({
     script: [{
         src: "https://unpkg.com/nprogress@0.2.0/nprogress.js",
         defer: "true",
+    }, {
+        src: `https://unpkg.com/vconsole@latest/dist/vconsole.min.js`,
+
     }]
 })
 </script>
 <style lang="scss" scoped>
+@import url("@/assets/css/song.scss");
+
 .switchType {
     width: auto;
     margin: 0 auto;
@@ -213,12 +234,13 @@ useHead({
         flex-direction: column;
         position: relative;
         overflow: hidden;
-
+        width: calc(100vw - 64px);
 
 
 
 
         .songCard {
+
             display: flex;
             flex-direction: column;
             position: relative;
@@ -230,6 +252,7 @@ useHead({
             font-family: "Exo-Medium";
             font-size: 24px;
             margin-bottom: 12px;
+            color: var(--Song-Main-Color)
         }
 
     }
@@ -332,6 +355,7 @@ useHead({
 
 .song-Line {
     display: flex;
+    color: var(--Song-Main-Color);
 
     .song-Line-label {
         font-size: 12px;
@@ -349,6 +373,7 @@ useHead({
     font-size: 30px;
     font-family: "Exo";
     margin-right: auto;
+    color: var(--Song-Main-Color);
 }
 
 .song-png {
@@ -369,50 +394,33 @@ useHead({
     left: 0;
     z-index: 1;
     display: flex;
+
     .songCard-bg-shadowBox {
+        flex: 1;
+        background-color: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(3px);
+
+    }
+
+
+
+
+}
+
+.songCard-bg-shadowBox-right {
+    flex: 1;
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.7);
+
+    img {
         position: absolute;
-        width: 50%;
-        height: 100%;
         left: 0;
         top: 0;
-        z-index: 3;
-        background-color: rgba(255, 255, 255, 0.43);
-        // box-shadow: 0px 10px 0px 0px rgba(255, 255, 255, 1);
-        backdrop-filter: blur(3px);
-    }
-
-    .songCard-bg-shadowBox-right {
-        position: absolute;
-        width: 50%;
-        height: 100%;
-        right: 0;
-        top: 0;
-        z-index: 3;
-        background-color: rgba(255, 255, 255, 0.43);
-        box-shadow: 10px 0px 0px 0px rgba(255, 255, 255, 1) inset;
-    }
-
-    .songCard-Bg {
-        position: absolute;
         object-fit: cover;
-        top: 50%;
         height: 100%;
-        transform: translateY(-50%);
-        right: 0px;
-        width: 50%;
-        opacity: 0.42;
-        z-index: 2;
-
-        &::before {
-            position: absolute;
-            content: '';
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            border-radius: 50%;
-            box-shadow: 0 0 30px 10px rgba(255, 255, 255, .7) inset;
-        }
+        width: 100%;
+        -webkit-mask-image: linear-gradient(to left, black, transparent);
+        mask-image: linear-gradient(to left, black, transparent);
     }
 }
 </style>

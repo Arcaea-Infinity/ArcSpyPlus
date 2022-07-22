@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts" setup>
-import nprogress from "nprogress"
+
 
 import { UserHistory } from '~~/composables/search';
 // import img from "../assets/img/mainPage_bg.png?raw"
@@ -55,13 +55,14 @@ const SearchCard = ref<UserHistory[]>([])
 onMounted(() => {
     if (window && window.localStorage) {
 
-        nprogress.configure({ showSpinner: false });
+        window.NProgress.configure({ showSpinner: false });
         let userHistory: UserHistory[] | null | string = localStorage.getItem("searchHistory");
         SearchCard.value = userHistory ? JSON.parse(userHistory) as UserHistory[] : [];
     }
 })
 async function SearchValue(e?: string) {
-    nprogress.start();
+    window.NProgress.start();
+    console.log(e, search.value)
     const value = (e ?? search.value).replaceAll(" ", "")
     if (typeof value === "string" && value.length > 0) {
         try {
