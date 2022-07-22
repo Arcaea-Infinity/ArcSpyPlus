@@ -8,8 +8,9 @@
   },
   "devDependencies": {
     "@types/nprogress": "^0.2.0",
-    "nuxt": "^3.0.0-rc.4",
-    "sass": "^1.52.3"
+    "nuxt": "^3.0.0-rc.6",
+    "sass": "^1.52.3",
+    "vconsole": "^3.14.6"
   },
   "dependencies": {
     "nprogress": "^0.2.0"
