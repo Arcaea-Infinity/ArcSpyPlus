@@ -62,7 +62,7 @@ onMounted(() => {
 })
 async function SearchValue(e?: string) {
     window.NProgress.start();
-    console.log(e, search.value)
+    // console.log(e, search.value)
     const value = (e ?? search.value).replaceAll(" ", "")
     if (typeof value === "string" && value.length > 0) {
         try {
@@ -91,26 +91,6 @@ async function SearchValue(e?: string) {
 
 }
 
-useHead({
-    titleTemplate: 'ArcSpy+',
-    viewport: 'width=device-width,user-scalable=no, initial-scale=1, maximum-scale=1',
-    charset: 'utf-8',
-    meta: [
-        { name: 'description', content: '一个简单的arc查分网站' }
-    ],
-    htmlAttrs: {
-        lang: "zh-cn"
-    },
-    // link: [
-    //     {
-    //         href: "https://unpkg.com/nprogress@0.2.0/nprogress.css"
-    //     }
-    // ],
-    // script: [{
-    //     src: "https://unpkg.com/nprogress@0.2.0/nprogress.js",
-    //     defer: "true",
-    // }]
-})
 </script>
 <style lang="scss" scoped>
 .title {

@@ -3,7 +3,7 @@
         <main class="searchMask column">
             <header class="between align-center userInfo" v-once>
                 <div class="column ">
-                    <div class="userName" @click="a">{{ userDetali?.name }}</div>
+                    <div class="userName">{{ userDetali?.name }}</div>
                     <div>
                         ArcID {{ userDetali?.code }}
                     </div>
@@ -21,14 +21,13 @@
                     </span>
                 </div>
             </header>
-            <div class="switchType" :class="currentswitch === 0 ? 'switchBtnCurrent-left' : 'switchBtnCurrent-right'"
-                v-once>
-                <div class="switchBtn account_info" :class="{ switchBtnCurrent: currentswitch === 0 }"
-                    @click="updateSwitch(0)">RECENT</div>
-                <div class="switchBtn acount_B30" :class="{ switchBtnCurrent: currentswitch === 1 }"
-                    @click="updateSwitch(1)">BEST30</div>
+            <div class="switchType" :class="currentswitch == 0 ? 'switchBtnCurrent-left' : 'switchBtnCurrent-right'">
+                <div class="switchBtn account_info" :class="{ switchBtnCurrent: currentswitch == 0 }"
+                    @click.stop="updateSwitch(0)">RECENT</div>
+                <div class="switchBtn acount_B30" :class="{ switchBtnCurrent: currentswitch == 1 }"
+                    @click.stop="updateSwitch(1)">BEST30</div>
             </div>
-            <div class="song-carousel" :class="{ 'SongList-B30Show': currentswitch === 1 }">
+            <div class="song-carousel" :class="{ 'SongList-B30Show': currentswitch == 1 }">
                 <ul class="songList">
                     <li class="song" :class="`song-${isColorDarkOrLight(item.theme_color)}`" v-for="item in songList"
                         :key="item.time_played">
@@ -70,25 +69,37 @@
                             </div>
                             <div class="song-footer">
                                 <span class="song-score">{{ item.score }}</span>
-                                <img class="song-score-png" :src="item.songLevel_bg" alt="" />
+                                <img class="song-score-png"
+                                    :class="{ 'song-score-png-ex': item.songLevel_bg.indexOf('ex+') === -1 && item.songLevel_bg.indexOf('ex') !== -1 }"
+                                    :src="item.songLevel_bg" alt="" />
                                 <img class="song-png" :src="item.songGrade_bg" alt="" />
                             </div>
                         </div>
                     </li>
                 </ul>
-                <!-- <ul class="songList">
-                    <li class="song" v-for="item in B30" :key="item.time_played">
+                <ul class="songList">
+                    <li class="song" :class="`song-${isColorDarkOrLight(item.theme_color)}`" v-for="item in B30"
+                        :key="item.time_played">
                         <div class="songCard-BgBox">
-                            <img class="songCard-Bg"
-                                :src="`https://server.awbugl.top/botarcapi/assets/song?songid=${item.song_id}`" alt="">
+
+                            <div class="songCard-bg-shadowBox"
+                                :style="item.theme_color ? `background:rgba(${item.theme_color.join(',')},0.54)` : ''">
+                            </div>
+                            <div class="songCard-bg-shadowBox-right"
+                                :style="item.theme_color ? `background:rgba(${item.theme_color.join(',')},0.54)` : ''">
+                                <img :src="`https://server.awbugl.top/botarcapi/assets/song?songid=${item.song_id}`"
+                                    alt="图片加载失败" />
+                            </div>
+
                         </div>
                         <div class="songCard">
                             <span class="songId">{{ item.song_id }}</span>
                             <div class="song-Line">
                                 <span>
                                     <span class="song-Line-label">PUREs&nbsp;&nbsp;</span>
-                                    <span class="song-Line-value">{{ item.perfect_count }}({{ item.shiny_perfect_count
-                                    }})</span>
+                                    <span class="song-Line-value">
+                                        {{ item.perfect_count }}
+                                        ({{ item.shiny_perfect_count }})</span>
                                 </span>
                                 <span style="margin-left:  auto;margin-right: 10%;">
                                     <span class="song-Line-label">FARs&nbsp;&nbsp;</span>
@@ -107,12 +118,14 @@
                             </div>
                             <div class="song-footer">
                                 <span class="song-score">{{ item.score }}</span>
+                                <img class="song-score-png"
+                                    :class="{ 'song-score-png-ex': item.songLevel_bg.indexOf('ex+') === -1 && item.songLevel_bg.indexOf('ex') !== -1 }"
+                                    :src="item.songLevel_bg" alt="" />
                                 <img class="song-png" :src="item.songGrade_bg" alt="" />
-                                <img class="song-score-png" :src="item.songLevel_bg" alt="" />
                             </div>
                         </div>
                     </li>
-                </ul> -->
+                </ul>
             </div>
         </main>
         <aside class="account-char" :style="{ backgroundImage: `url(${charBg})` }">
@@ -128,8 +141,13 @@ const route = useRoute();
 const search = new search_Account(route.query.ArcId as string);
 const currentswitch = ref<number>(0)
 const charBg = ref<string>("https://server.awbugl.top/botarcapi/assets/char?partner=1");
-const songImgList = ref<HTMLImageElement[]>([]);
 
+
+await search.onCreated()
+const B30 = await search.getUserB30();
+const userDetali = search.getAccount_info()
+const songList = search.getSongList();
+await search.destroy();
 async function getBgURL(sum: number, is_char_uncapped: boolean) {
     charBg.value = `https://server.awbugl.top/botarcapi/assets/char?partner=${sum}&awakened=${is_char_uncapped}`;
 }
@@ -141,43 +159,12 @@ function updateSwitch(e: number) {
     currentswitch.value = e
 }
 
-await search.onCreated()
-const B30 = await search.getUserB30();
-const userDetali = search.getAccount_info()
-const songList = search.getSongList();
-await search.destroy();
-const a = () => {
-    console.log("触发点击事件")
-    songList.forEach(e => colorfulImg(`https://server.awbugl.top/botarcapi/assets/song?songid=${e.song_id}`, e))
-
-}
 onMounted(() => {
-    const vConsole = new window.VConsole()
+    // const vConsole = new window.VConsole();
+    songList.forEach(e => colorfulImg(`https://server.awbugl.top/botarcapi/assets/song?songid=${e.song_id}`, e))
 })
 getBgURL(userDetali.character, userDetali.is_char_uncapped)
-useHead({
-    titleTemplate: 'ArcSpy+',
-    viewport: 'width=device-width,user-scalable=no, initial-scale=1, maximum-scale=1',
-    charset: 'utf-8',
-    meta: [
-        { name: 'description', content: '一个简单的arc查分网站' }
-    ],
-    htmlAttrs: {
-        lang: "zh-cn"
-    },
-    link: [
-        {
-            href: "https://unpkg.com/nprogress@0.2.0/nprogress.css"
-        }
-    ],
-    script: [{
-        src: "https://unpkg.com/nprogress@0.2.0/nprogress.js",
-        defer: "true",
-    }, {
-        src: `https://unpkg.com/vconsole@latest/dist/vconsole.min.js`,
 
-    }]
-})
 </script>
 <style lang="scss" scoped>
 @import url("@/assets/css/song.scss");
@@ -220,7 +207,7 @@ useHead({
 .songList {
     flex: 1;
     overflow-y: auto;
-    height: 72vh;
+    height: 73vh;
     padding: 0px 32px;
 
 
@@ -263,7 +250,7 @@ useHead({
 }
 
 .userInfo {
-    padding: 10vmin;
+    padding: 6vmin 10vmin 10vmin;
     font-size: 17px;
     font-family: "Kazesawa";
     color: #1F1F32;
@@ -318,9 +305,11 @@ useHead({
     img {
         position: absolute;
         z-index: 5;
-        width: 20vmin;
+        width: min(120px, 15vmin);
         object-fit: cover;
-        transform: translateY(-23%) translate(-15%);
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -45%);
     }
 
 }
@@ -384,6 +373,11 @@ useHead({
 .song-score-png {
     object-fit: cover;
     width: 26%;
+}
+
+.song-score-png-ex {
+    object-fit: cover;
+    width: 18%;
 }
 
 .songCard-BgBox {

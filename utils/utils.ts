@@ -7,19 +7,19 @@ export async function colorfulImg(img: string | HTMLImageElement, item: RecentSc
         newImg.crossOrigin = "Anonymous"; // 跨域请求校验
         newImg.width = 1; // 压缩图片大小到1 * 1
         newImg.height = 1;
-        console.log(ctx, canvas, newImg.complete, '构建成功');
+        // console.log(ctx, canvas, newImg.complete, '构建成功');
         newImg.onerror = (e: Event) => {
-            console.log("加载错误失败");
-            console.log(e)
+            // console.log("加载错误失败");
+            // console.log(e)
         }
         function load(_?: Event) {
-            console.log("进入load函数")
+            // console.log("进入load函数")
             canvas.width = newImg.width;
             canvas.height = newImg.height; //canvas压缩大小到1px
             ctx.drawImage(newImg, 0, 0); // 图片绘制到canvas
             const data = ctx.getImageData(0, 0, 1, 1).data; // 获取原始canvas像素数据
             item.theme_color = [data[0], data[1], data[2]] // 结束
-            console.log(`${item.theme_color} ${item.song_id} is rgb: %c   `, `background:rgb(${item.theme_color.join(",")})`)
+            // console.log(`${item.theme_color} ${item.song_id} is rgb: %c   `, `background:rgb(${item.theme_color.join(",")})`)
             resolve({
                 r: data[0],
                 g: data[1],
@@ -29,7 +29,7 @@ export async function colorfulImg(img: string | HTMLImageElement, item: RecentSc
         }
         newImg.addEventListener("load", load)
         newImg.src = typeof img === "string" ? img : img.src; // 添加图片地址
-        console.log(newImg.src, '图片路径')
+        // console.log(newImg.src, '图片路径')
         // const imgInterval = setInterval(() => {
         //     if (newImg.complete) {
         //         clearInterval(imgInterval);
@@ -43,7 +43,9 @@ export async function colorfulImg(img: string | HTMLImageElement, item: RecentSc
 /*
  * rgb value to hsl 色相(H)、饱和度(S)、明度(L)
  */
-export function rgbToHsl(rgb: RGB) {
+export function rgbToHsl(rgb: RGB = [255, 255, 255]) {
+    // console.log(rgb, '我是rgb')
+
     let [r, g, b] = rgb;
     r /= 255, g /= 255, b /= 255;
     let max = Math.max(r, g, b), min = Math.min(r, g, b);
