@@ -28,104 +28,110 @@
                     @click.stop="updateSwitch(1)">BEST30</div>
             </div>
             <div class="song-carousel" :class="{ 'SongList-B30Show': currentswitch == 1 }">
-                <ul class="songList">
-                    <li class="song" :class="`song-${isColorDarkOrLight(item.theme_color)}`" v-for="item in songList"
-                        :key="item.time_played">
-                        <div class="songCard-BgBox">
+                <div class="ScrollBox">
+                    <ul class="songList">
+                        <li class="song" :class="`song-${isColorDarkOrLight(item.theme_color)}`"
+                            v-for="item in songList" :key="item.time_played">
+                            <div class="songCard-BgBox">
 
-                            <div class="songCard-bg-shadowBox"
-                                :style="item.theme_color ? `background:rgba(${item.theme_color.join(',')},0.54)` : ''">
-                            </div>
-                            <div class="songCard-bg-shadowBox-right"
-                                :style="item.theme_color ? `background:rgba(${item.theme_color.join(',')},0.54)` : ''">
-                                <img :src="`https://server.awbugl.top/botarcapi/assets/song?songid=${item.song_id}`"
-                                    alt="图片加载失败" />
-                            </div>
+                                <div class="songCard-bg-shadowBox"
+                                    :style="item.theme_color ? `background:rgba(${item.theme_color.join(',')},0.54)` : ''">
+                                </div>
+                                <div class="songCard-bg-shadowBox-right"
+                                    :style="item.theme_color ? `background:rgba(${item.theme_color.join(',')},0.54)` : ''">
+                                    <img :src="`https://server.awbugl.top/botarcapi/assets/song?songid=${item.song_id}`"
+                                        alt="图片加载失败" />
+                                </div>
 
-                        </div>
-                        <div class="songCard">
-                            <span class="songId">{{ item.song_id }}</span>
-                            <div class="song-Line">
-                                <span>
-                                    <span class="song-Line-label">PUREs&nbsp;&nbsp;</span>
-                                    <span class="song-Line-value">
-                                        {{ item.perfect_count }}
-                                        ({{ item.shiny_perfect_count }})</span>
-                                </span>
-                                <span style="margin-left:  auto;margin-right: 10%;">
-                                    <span class="song-Line-label">FARs&nbsp;&nbsp;</span>
-                                    <span class="song-Line-value">{{ item.near_count }}</span>
-                                </span>
                             </div>
-                            <div class="song-Line" style="margin-top:20px;margin-bottom: 16px;">
-                                <span>
-                                    <span class="song-Line-label">LOSTs&nbsp;&nbsp;</span>
-                                    <span class="song-Line-value"> {{ item.miss_count }}</span>
-                                </span>
-                                <span style="margin-left:  auto;margin-right: 10%;">
-                                    <span class="song-Line-label">RATING&nbsp;&nbsp;</span>
-                                    <span class="song-Line-value">{{ item.rating.toFixed(2) }}</span>
-                                </span>
+                            <div class="songCard">
+                                <span class="songId">{{ item.song_id }}</span>
+                                <div class="song-Line">
+                                    <span>
+                                        <span class="song-Line-label">PUREs&nbsp;&nbsp;</span>
+                                        <span class="song-Line-value">
+                                            {{ item.perfect_count }}
+                                            ({{ item.shiny_perfect_count }})</span>
+                                    </span>
+                                    <span style="margin-left:  auto;margin-right:30%;">
+                                        <span class="song-Line-label">FARs&nbsp;&nbsp;</span>
+                                        <span class="song-Line-value">{{ item.near_count }}</span>
+                                    </span>
+                                </div>
+                                <div class="song-Line" style="margin-top:20px;margin-bottom: 16px;">
+                                    <span>
+                                        <span class="song-Line-label">LOSTs&nbsp;&nbsp;</span>
+                                        <span class="song-Line-value"> {{ item.miss_count }}</span>
+                                    </span>
+                                    <span style="margin-left:  auto;margin-right:30%;">
+                                        <span class="song-Line-label">RATING&nbsp;&nbsp;</span>
+                                        <span class="song-Line-value">{{ item.rating.toFixed(2) }}</span>
+                                    </span>
+                                </div>
+                                <div class="song-footer">
+                                    <span class="song-score">{{ item.score }}</span>
+                                    <img class="song-score-png"
+                                        :class="{ 'song-score-png-ex': item.songLevel_bg.indexOf('ex+') === -1 && item.songLevel_bg.indexOf('ex') !== -1 }"
+                                        :src="item.songLevel_bg" alt="" />
+                                    <img class="song-png" :src="item.songGrade_bg" alt="" />
+                                </div>
                             </div>
-                            <div class="song-footer">
-                                <span class="song-score">{{ item.score }}</span>
-                                <img class="song-score-png"
-                                    :class="{ 'song-score-png-ex': item.songLevel_bg.indexOf('ex+') === -1 && item.songLevel_bg.indexOf('ex') !== -1 }"
-                                    :src="item.songLevel_bg" alt="" />
-                                <img class="song-png" :src="item.songGrade_bg" alt="" />
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-                <ul class="songList">
-                    <li class="song" :class="`song-${isColorDarkOrLight(item.theme_color)}`" v-for="item in B30"
-                        :key="item.time_played">
-                        <div class="songCard-BgBox">
+                        </li>
+                    </ul>
+                </div>
+                <div class="ScrollBox">
 
-                            <div class="songCard-bg-shadowBox"
-                                :style="item.theme_color ? `background:rgba(${item.theme_color.join(',')},0.54)` : ''">
-                            </div>
-                            <div class="songCard-bg-shadowBox-right"
-                                :style="item.theme_color ? `background:rgba(${item.theme_color.join(',')},0.54)` : ''">
-                                <img :src="`https://server.awbugl.top/botarcapi/assets/song?songid=${item.song_id}`"
-                                    alt="图片加载失败" />
-                            </div>
+                    <ul class="songList">
+                        <li class="song" :class="`song-${isColorDarkOrLight(item.theme_color)}`" v-for="item in B30"
+                            :key="item.time_played">
+                            <div class="songCard-BgBox">
 
-                        </div>
-                        <div class="songCard">
-                            <span class="songId">{{ item.song_id }}</span>
-                            <div class="song-Line">
-                                <span>
-                                    <span class="song-Line-label">PUREs&nbsp;&nbsp;</span>
-                                    <span class="song-Line-value">
-                                        {{ item.perfect_count }}
-                                        ({{ item.shiny_perfect_count }})</span>
-                                </span>
-                                <span style="margin-left:  auto;margin-right: 10%;">
-                                    <span class="song-Line-label">FARs&nbsp;&nbsp;</span>
-                                    <span class="song-Line-value">{{ item.near_count }}</span>
-                                </span>
+                                <div class="songCard-bg-shadowBox"
+                                    :style="item.theme_color ? `background:rgba(${item.theme_color.join(',')},0.54)` : ''">
+                                </div>
+                                <div class="songCard-bg-shadowBox-right"
+                                    :style="item.theme_color ? `background:rgba(${item.theme_color.join(',')},0.54)` : ''">
+                                    <img :src="`https://server.awbugl.top/botarcapi/assets/song?songid=${item.song_id}`"
+                                        alt="图片加载失败" />
+                                </div>
+
                             </div>
-                            <div class="song-Line" style="margin-top:20px;margin-bottom: 16px;">
-                                <span>
-                                    <span class="song-Line-label">LOSTs&nbsp;&nbsp;</span>
-                                    <span class="song-Line-value"> {{ item.miss_count }}</span>
-                                </span>
-                                <span style="margin-left:  auto;margin-right: 10%;">
-                                    <span class="song-Line-label">RATING&nbsp;&nbsp;</span>
-                                    <span class="song-Line-value">{{ item.rating.toFixed(2) }}</span>
-                                </span>
+                            <div class="songCard">
+                                <span class="songId">{{ item.song_id }}</span>
+                                <div class="song-Line">
+                                    <span>
+                                        <span class="song-Line-label">PUREs&nbsp;&nbsp;</span>
+                                        <span class="song-Line-value">
+                                            {{ item.perfect_count }}
+                                            ({{ item.shiny_perfect_count }})</span>
+                                    </span>
+                                    <span style="margin-left:  auto;margin-right: 30%;">
+                                        <span class="song-Line-label">FARs&nbsp;&nbsp;</span>
+                                        <span class="song-Line-value">{{ item.near_count }}</span>
+                                    </span>
+                                </div>
+                                <div class="song-Line" style="margin-top:20px;margin-bottom: 16px;">
+                                    <span>
+                                        <span class="song-Line-label">LOSTs&nbsp;&nbsp;</span>
+                                        <span class="song-Line-value"> {{ item.miss_count }}</span>
+                                    </span>
+                                    <span style="margin-left:  auto;margin-right: 30%;">
+                                        <span class="song-Line-label">RATING&nbsp;&nbsp;</span>
+                                        <span class="song-Line-value">{{ item.rating.toFixed(2) }}</span>
+                                    </span>
+                                </div>
+                                <div class="song-footer">
+                                    <span class="song-score">{{ item.score }}</span>
+                                    <img class="song-score-png"
+                                        :class="{ 'song-score-png-ex': item.songLevel_bg.indexOf('ex+') === -1 && item.songLevel_bg.indexOf('ex') !== -1 }"
+                                        :src="item.songLevel_bg" alt="" />
+                                    <img class="song-png" :src="item.songGrade_bg" alt="" />
+                                </div>
                             </div>
-                            <div class="song-footer">
-                                <span class="song-score">{{ item.score }}</span>
-                                <img class="song-score-png"
-                                    :class="{ 'song-score-png-ex': item.songLevel_bg.indexOf('ex+') === -1 && item.songLevel_bg.indexOf('ex') !== -1 }"
-                                    :src="item.songLevel_bg" alt="" />
-                                <img class="song-png" :src="item.songGrade_bg" alt="" />
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+                        </li>
+                    </ul>
+                </div>
+
             </div>
         </main>
         <aside class="account-char" :style="{ backgroundImage: `url(${charBg})` }">
@@ -161,13 +167,16 @@ function updateSwitch(e: number) {
 
 onMounted(() => {
     // const vConsole = new window.VConsole();
-    songList.forEach(e => colorfulImg(`https://server.awbugl.top/botarcapi/assets/song?songid=${e.song_id}`, e))
+    // http://localhost:3000/api/assets?songid=worldender
+    songList.forEach(e => colorfulImg(e.song_id, e))
+    B30.forEach(e => colorfulImg(e.song_id, e))
 })
 getBgURL(userDetali.character, userDetali.is_char_uncapped)
 
 </script>
 <style lang="scss" scoped>
 @import url("@/assets/css/song.scss");
+
 
 .switchType {
     width: auto;
@@ -204,25 +213,53 @@ getBgURL(userDetali.character, userDetali.is_char_uncapped)
     }
 }
 
-.songList {
+.ScrollBox {
     flex: 1;
     overflow-y: auto;
-    height: 73vh;
-    padding: 0px 32px;
+    height: 60vh;
+    padding: 0px 16px;
 
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
 
+@media screen and (max-width: 501px) {
+    .song {
+        width: 100% !important;
+        max-width: none !important;
+    }
+
+    .songList {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media screen and (max-width: 830px) and (min-width: 501px) {
+
+    .songList {
+        grid-template-columns: 1fr 1fr !important;
+    }
+}
+
+.songList {
+    
+    display: grid;
+    justify-content: center;
+    grid-template-columns: repeat(auto-fill, min(350px, 32%));
+    column-gap: 16px;
 
     .song {
         min-height: 30%;
         border-radius: 20px;
-        // background-color: #FFFFFF;
+
         margin-bottom: 12px;
         display: flex;
         flex-direction: column;
         position: relative;
         overflow: hidden;
-        width: calc(100vw - 64px);
-
+        width: 100%;
+        max-width: 350px;
 
 
 

@@ -32,7 +32,8 @@
                 </aside>
             </main>
             <footer class="mainPage-footer" v-memo>
-                <span id="arcspy-version">
+                <span id="arcspy-version" @click="a">
+                    
                     Build v0.1.041221
                 </span>
                 <a href="https://github.com/Arcaea-Infinity/ArcSpyPlus" class="githubLogo" target="_blank">
@@ -40,6 +41,7 @@
                 </a>
             </footer>
         </div>
+
     </NuxtLayout>
 </template>
 
@@ -51,7 +53,7 @@ import { UserHistory } from '~~/composables/search';
 // console.log(img)
 const search = ref<string>("");
 const showSearchError = ref<boolean>(false);
-const SearchCard = ref<UserHistory[]>([])
+const SearchCard = ref<UserHistory[]>([]);
 onMounted(() => {
     if (window && window.localStorage) {
 
@@ -60,6 +62,13 @@ onMounted(() => {
         SearchCard.value = userHistory ? JSON.parse(userHistory) as UserHistory[] : [];
     }
 })
+async function a() {
+    const result = await $fetch("/api/assets", {
+        params: {
+            songid: "worldender"
+        }
+    });
+}
 async function SearchValue(e?: string) {
     window.NProgress.start();
     // console.log(e, search.value)

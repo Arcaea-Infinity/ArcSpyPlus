@@ -5,7 +5,7 @@
     <Title>ArcSpy+</Title>
     <Meta charset="UTF-8" />
     <Meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <Meta name="viewport" content="width=device-width,user-scalable=no, initial-scale=1, maximum-scale=1" />
+    <Meta name="viewport" content="width=device-width,user-scalable=no, initial-scale=1.0, maximum-scale=1.0" />
     <Meta name="description" content="Arcaea查分站点" />
   </Head>
   <NuxtPage></NuxtPage>
@@ -24,11 +24,9 @@ useHead({
   script: [{
     src: "https://unpkg.com/nprogress@0.2.0/nprogress.js",
     defer: "true",
-  }
-  // , {
-  //   src: `https://unpkg.com/vconsole@latest/dist/vconsole.min.js`,
-  // }
-  ]
+  }, {
+    src: `https://unpkg.com/vconsole@latest/dist/vconsole.min.js`,
+  }]
 })
 if (!String.prototype.replaceAll) {
   String.prototype.replaceAll = function (str: any, newStr: any) {

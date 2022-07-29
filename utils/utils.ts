@@ -1,5 +1,11 @@
 import type { RecentScoreType, RGB } from "~~/composables/search";
 export async function colorfulImg(img: string | HTMLImageElement, item: RecentScoreType) {
+    console.log(item, '歌曲')
+    // const str = await $fetch("/api/assets", {
+    //     params: {
+    //         songid: img
+    //     }
+    // })
     return new Promise((resolve, reject) => {
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d"); // 构建canvas
@@ -7,19 +13,13 @@ export async function colorfulImg(img: string | HTMLImageElement, item: RecentSc
         newImg.crossOrigin = "Anonymous"; // 跨域请求校验
         newImg.width = 1; // 压缩图片大小到1 * 1
         newImg.height = 1;
-        // console.log(ctx, canvas, newImg.complete, '构建成功');
-        newImg.onerror = (e: Event) => {
-            // console.log("加载错误失败");
-            // console.log(e)
-        }
         function load(_?: Event) {
-            // console.log("进入load函数")
             canvas.width = newImg.width;
             canvas.height = newImg.height; //canvas压缩大小到1px
             ctx.drawImage(newImg, 0, 0); // 图片绘制到canvas
             const data = ctx.getImageData(0, 0, 1, 1).data; // 获取原始canvas像素数据
             item.theme_color = [data[0], data[1], data[2]] // 结束
-            // console.log(`${item.theme_color} ${item.song_id} is rgb: %c   `, `background:rgb(${item.theme_color.join(",")})`)
+
             resolve({
                 r: data[0],
                 g: data[1],
@@ -27,17 +27,18 @@ export async function colorfulImg(img: string | HTMLImageElement, item: RecentSc
             })
             newImg.removeEventListener("load", load)
         }
-        newImg.addEventListener("load", load)
-        newImg.src = typeof img === "string" ? img : img.src; // 添加图片地址
-        // console.log(newImg.src, '图片路径')
-        // const imgInterval = setInterval(() => {
-        //     if (newImg.complete) {
-        //         clearInterval(imgInterval);
-        //         load()
-        //     }
-        // }, 1)
+        function error(_?: Event) {
+            console.log("错误")
+            if (newImg.src.indexOf(".jpg") !== -1) {
+                newImg.src = `${window.origin}/api/assets?songid=${img}&difficulty=${item.difficulty}`
+            }
+        }
+        newImg.addEventListener("load", load);
+        newImg.addEventListener("error", error);
+        if (typeof img === "string") {
+            newImg.src = `${window.origin}/${img}_${item.difficulty}.jpg`
+        }
     })
-
 }
 
 /*
@@ -86,8 +87,8 @@ const PPTborder = [
     (ppt: number) => (ppt < 700),
     (ppt: number) => (ppt > 700 && ppt < 1100),
     (ppt: number) => (ppt >= 1100 && ppt < 1200),
-    (ppt: number) => (ppt >= 1100 && ppt < 1220),
-    (ppt: number) => (ppt > 1220)]
+    (ppt: number) => (ppt >= 1100 && ppt < 1250),
+    (ppt: number) => (ppt > 1250)]
 
 export async function getAccountPPTBorder(ppt: number): Promise<string> {
     const index = PPTborder.findIndex(e => e(ppt));
