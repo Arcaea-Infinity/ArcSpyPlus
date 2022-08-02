@@ -216,7 +216,7 @@ getBgURL(userDetali.character, userDetali.is_char_uncapped)
 .ScrollBox {
     flex: 1;
     overflow-y: auto;
-    height: 60vh;
+    height: 65vh;
     padding: 0px 16px;
 
     &::-webkit-scrollbar {

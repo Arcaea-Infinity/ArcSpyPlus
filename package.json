@@ -10,10 +10,10 @@
     "@types/nprogress": "^0.2.0",
     "nuxt": "^3.0.0-rc.6",
     "sass": "^1.52.3",
-    "vconsole": "^3.14.6"
+    "vconsole": "^3.14.6",
+    "nprogress": "^0.2.0"
   },
   "dependencies": {
-    "images": "^3.2.4",
-    "nprogress": "^0.2.0"
+    "images": "^3.2.4"
   }
 }
