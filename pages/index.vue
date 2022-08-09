@@ -171,6 +171,7 @@ async function SearchValue(e?: string) {
     margin-top: 16px;
 
     .search-leader {
+        cursor: pointer;
         border-radius: 40px;
         color: #817fa0;
         background-color: #F7F7FF;

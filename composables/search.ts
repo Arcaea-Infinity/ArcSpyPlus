@@ -113,6 +113,7 @@ export default class search_Account {
                     }
                 }
             );
+            console.log(result, '查询出来的结果')
             if (result.value) {
                 try {
                     if (result.value.status === 0) {
@@ -134,7 +135,7 @@ export default class search_Account {
                 return
             }
         } catch (error) {
-            console.log(error)
+            console.log(error,"我是错误")
         }
     }
     public async getUserB30() {
