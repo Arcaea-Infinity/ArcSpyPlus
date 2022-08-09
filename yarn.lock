@@ -2938,7 +2938,7 @@ nuxi@^3.0.0-rc.6:
   optionalDependencies:
     fsevents "~2.3.2"
 
-nuxt@^3.0.0-rc.6:
+nuxt@3.0.0-rc.6:
   version "3.0.0-rc.6"
   resolved "https://registry.npmmirror.com/nuxt/-/nuxt-3.0.0-rc.6.tgz#c0a81f53d1c39fefae87abebaba8c63949e40751"
   integrity sha512-Ko/LBIUBf25bSXKoRnPEplMngw2dHU8qkV5Twdm7yZ0DfdFkwaTVzTtwvbWsFt+H9vh1aUUTCSyEWnmNorkkxQ==
