@@ -11,23 +11,24 @@
                         Join Date {{ new Date(userDetali?.join_date).toLocaleDateString().replaceAll("/", "-") }}
                     </div>
                 </div>
-                <div class="account_PPT">
-                    <img :src="userDetali.rating_bg" alt="PPT图片加载失败" />
-                    <span style="font-size:26px">
-                        {{ insertStr(`${userDetali?.rating}`, 2, ".").slice(0, 2) }}
-                    </span>
-                    <span>
-                        {{ insertStr(`${userDetali?.rating}`, 2, ".").slice(2) }}
-                    </span>
-                </div>
+
             </header>
             <div class="switchType" :class="currentswitch == 0 ? 'switchBtnCurrent-left' : 'switchBtnCurrent-right'">
                 <div class="switchBtn account_info" :class="{ switchBtnCurrent: currentswitch == 0 }"
                     @click.stop="updateSwitch(0)">RECENT</div>
                 <div class="switchBtn acount_B30" :class="{ switchBtnCurrent: currentswitch == 1 }"
                     @click.stop="updateSwitch(1)">BEST30</div>
+                <div class="account_PPT">
+                    <img :src="userDetali.rating_bg" alt="PPT图片加载失败" />
+                    <span style="font-size:32px">
+                        {{ insertStr(`${userDetali?.rating}`, 2, ".").slice(0, 2) }}
+                    </span>
+                    <span>
+                        {{ insertStr(`${userDetali?.rating}`, 2, ".").slice(2) }}
+                    </span>
+                </div>
             </div>
-            <div class="song-carousel" :class="{ 'SongList-B30Show': currentswitch == 1 }">
+            <div class="song-carousel" :ref="getBoxHeight" :class="{ 'SongList-B30Show': currentswitch == 1 }">
                 <div class="ScrollBox">
                     <ul class="songList">
                         <li class="song" :class="`song-${isColorDarkOrLight(item.theme_color)}`"
@@ -35,10 +36,10 @@
                             <div class="songCard-BgBox">
 
                                 <div class="songCard-bg-shadowBox"
-                                    :style="item.theme_color ? `background:rgba(${item.theme_color.join(',')},0.54)` : ''">
+                                    :style="item.theme_color ? `background:rgba(${item.theme_color.join(',')},1)` : ''">
                                 </div>
                                 <div class="songCard-bg-shadowBox-right"
-                                    :style="item.theme_color ? `background:rgba(${item.theme_color.join(',')},0.54)` : ''">
+                                    :style="item.theme_color ? `background:rgba(${item.theme_color.join(',')},1)` : ''">
                                     <img :src="`https://server.awbugl.top/botarcapi/assets/song?songid=${item.song_id}`"
                                         alt="图片加载失败" />
                                 </div>
@@ -87,10 +88,10 @@
                             <div class="songCard-BgBox">
 
                                 <div class="songCard-bg-shadowBox"
-                                    :style="item.theme_color ? `background:rgba(${item.theme_color.join(',')},0.54)` : ''">
+                                    :style="item.theme_color ? `background:rgba(${item.theme_color.join(',')},1)` : ''">
                                 </div>
                                 <div class="songCard-bg-shadowBox-right"
-                                    :style="item.theme_color ? `background:rgba(${item.theme_color.join(',')},0.54)` : ''">
+                                    :style="item.theme_color ? `background:rgba(${item.theme_color.join(',')},1)` : ''">
                                     <img :src="`https://server.awbugl.top/botarcapi/assets/song?songid=${item.song_id}`"
                                         alt="图片加载失败" />
                                 </div>
@@ -147,13 +148,20 @@ const route = useRoute();
 const search = new search_Account(route.query.ArcId as string);
 const currentswitch = ref<number>(0)
 const charBg = ref<string>("https://server.awbugl.top/botarcapi/assets/char?partner=1");
-
+const SongListHeight = ref<string>("")
 
 await search.onCreated()
 const B30 = await search.getUserB30();
 const userDetali = search.getAccount_info()
 const songList = search.getSongList();
 await search.destroy();
+function getBoxHeight(e: HTMLDivElement) {
+    if (e instanceof HTMLDivElement) {
+        console.dir(e.offsetHeight, '我是div')
+        SongListHeight.value = `${e.offsetHeight}px`
+
+    }
+}
 async function getBgURL(sum: number, is_char_uncapped: boolean) {
     charBg.value = `https://server.awbugl.top/botarcapi/assets/char?partner=${sum}&awakened=${is_char_uncapped}`;
 }
@@ -179,19 +187,17 @@ getBgURL(userDetali.character, userDetali.is_char_uncapped)
 
 
 .switchType {
-    width: auto;
-    margin: 0 auto;
     display: flex;
-    justify-content: center;
-    margin-bottom: 32px;
+    justify-content: flex-start;
     position: relative;
+    padding-left: 16px;
 
     &::after {
         content: "";
         position: absolute;
-        width: calc(50% - 6px);
+        width: 100px;
         height: 100%;
-        border-radius: 20px;
+        border-radius: 20px 20px 0px 0px;
         box-shadow: 5px 6px 3px 0 hsl(0deg 0% 57% / 40%);
         background-color: #FFF;
         transition: left 0.19s, transform 0.19s;
@@ -200,15 +206,14 @@ getBgURL(userDetali.character, userDetali.is_char_uncapped)
 
 .switchBtnCurrent-left {
     &::after {
-        left: 0;
+        left: 16px;
     }
 }
 
 .switchBtnCurrent-right {
     &::after {
         // width: 50% !important;
-        left: 100%;
-        transform: translateX(-100%);
+        left: 136px;
         // right: 0;
     }
 }
@@ -216,7 +221,9 @@ getBgURL(userDetali.character, userDetali.is_char_uncapped)
 .ScrollBox {
     flex: 1;
     overflow-y: auto;
-    height: 65vh;
+    max-height: v-bind(SongListHeight);
+    height: 55vh;
+    min-height: v-bind(SongListHeight);
     padding: 0px 16px;
 
     &::-webkit-scrollbar {
@@ -224,10 +231,19 @@ getBgURL(userDetali.character, userDetali.is_char_uncapped)
     }
 }
 
-@media screen and (max-width: 501px) {
+@media screen and (max-width: 500px) {
+    .ScrollBox {
+        padding: 0;
+    }
+
     .song {
+        border-radius: 0px !important;
         width: 100% !important;
         max-width: none !important;
+
+        * {
+            user-select: none;
+        }
     }
 
     .songList {
@@ -243,7 +259,7 @@ getBgURL(userDetali.character, userDetali.is_char_uncapped)
 }
 
 .songList {
-    
+
     display: grid;
     justify-content: center;
     grid-template-columns: repeat(auto-fill, min(350px, 32%));
@@ -252,8 +268,8 @@ getBgURL(userDetali.character, userDetali.is_char_uncapped)
     .song {
         min-height: 30%;
         border-radius: 20px;
-
-        margin-bottom: 12px;
+        border-bottom: 1px solid #212121;
+        // margin-bottom: 12px;
         display: flex;
         flex-direction: column;
         position: relative;
@@ -290,7 +306,7 @@ getBgURL(userDetali.character, userDetali.is_char_uncapped)
     padding: 6vmin 10vmin 10vmin;
     font-size: 17px;
     font-family: "Kazesawa";
-    color: #1F1F32;
+    color: #fff;
     font-weight: 500;
 
     .userName {
@@ -301,17 +317,18 @@ getBgURL(userDetali.character, userDetali.is_char_uncapped)
 
 .searchMask {
     flex: 1;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.21);
     position: relative;
     z-index: 10;
 }
 
 .switchBtn {
-    color: #5C5997;
-    border-radius: 20px;
+    width: 110px;
+    color: #FFF;
+    border-radius: 20px 20px 0px 0px;
     background-color: transparent;
     padding: 7px 20px;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
     position: relative;
     z-index: 1;
@@ -325,24 +342,34 @@ getBgURL(userDetali.character, userDetali.is_char_uncapped)
     margin-right: 12px;
 }
 
+@media screen and (max-width:500px) {
+    .account_PPT {
+        span {
+            -webkit-text-stroke: 1px #42406E;
+        }
+    }
+}
+
 .account_PPT {
-    position: relative;
-    transform: translateY(30%);
+    position: absolute;
+    top: 0;
+    right: 32px;
+    // transform: translateY(30%);
 
     span {
+        letter-spacing: 2px;
         position: relative;
         z-index: 10;
-        color: #FFF;
-        -webkit-text-stroke: 1px #42406E;
-        font-size: 18px;
+        color: #fff;
+        font-size: 22px;
         font-family: "Exo";
-        font-weight: 600;
+        font-weight: 700;
     }
 
     img {
         position: absolute;
         z-index: 5;
-        width: min(120px, 15vmin);
+        width: min(90px, 20vmin);
         object-fit: cover;
         left: 50%;
         top: 50%;
@@ -355,13 +382,15 @@ getBgURL(userDetali.character, userDetali.is_char_uncapped)
     position: absolute;
     z-index: 3;
     background-size: cover;
-    background-position: 0 20px;
-    opacity: 0.4;
+    background-position: -73px -152px;
+    background-repeat: no-repeat;
     width: 100%;
     height: 100%;
+    background-color: #2F2F39;
 }
 
 .song-carousel {
+    flex: 1;
     display: flex;
     width: 200vw;
     transition: all 0.12s;
