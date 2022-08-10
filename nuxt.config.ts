@@ -9,9 +9,9 @@ export default defineNuxtConfig({
         server: {
             port: 3999
         },
-        // esbuild: {
-        //     pure: ["console.log"],
-        //     minify: true
-        // }
+        esbuild: {
+            pure: ["console.log"],
+            minify: true
+        }
     }
 })

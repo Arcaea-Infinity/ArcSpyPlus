@@ -1,6 +1,6 @@
 import type { RecentScoreType, RGB } from "~~/composables/search";
 export async function colorfulImg(img: string | HTMLImageElement, item: RecentScoreType) {
-    console.log(item, '歌曲')
+    // console.log(item, '歌曲')
     // const str = await $fetch("/api/assets", {
     //     params: {
     //         songid: img
@@ -28,7 +28,7 @@ export async function colorfulImg(img: string | HTMLImageElement, item: RecentSc
             newImg.removeEventListener("load", load)
         }
         function error(_?: Event) {
-            console.log("错误")
+            // console.log("错误")
             if (newImg.src.indexOf(".jpg") !== -1) {
                 newImg.src = `${window.origin}/api/assets?songid=${img}&difficulty=${item.difficulty}`
             }

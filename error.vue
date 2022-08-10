@@ -16,7 +16,7 @@ if (error.value) {
         msg.value = "亲亲,请不要查官方Id,因为根本查不到的捏"
     }
 }
-console.log(error)
+// console.log(error)
 function ReturnHomo() {
     window.location.replace(window.location.origin);
 }

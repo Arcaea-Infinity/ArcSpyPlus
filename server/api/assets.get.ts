@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
                 const buffer = fs.readFileSync(fileTry[0].flag ? fileTry[0].path : fileTry[1].path);
                 return buffer
             } else {
-                console.log("文件不存在")
+                // console.log("文件不存在")
                 const png: Blob = await $fetch(`https://server.awbugl.top/botarcapi/assets/song?songid=${songid}&difficulty=${difficulty}`);
                 let type = png.type === "image/jpeg" ? "jpg" : "png"
                 try {
@@ -29,9 +29,9 @@ export default defineEventHandler(async (event) => {
                 }
             }
         } catch (error) {
-            console.log(error, '查询文件错误')
+            // console.log(error, '查询文件错误')
         }
-        console.log(`https://server.awbugl.top/botarcapi/assets/song?songid=${songid}`)
+        // console.log(`https://server.awbugl.top/botarcapi/assets/song?songid=${songid}`)
     }
 
 })

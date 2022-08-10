@@ -95,7 +95,7 @@ export default class search_Account {
 
     public async onCreated(): Promise<void> {
         try {
-            console.log(this.ArcId, '被查询的arcId')
+            // console.log(this.ArcId, '被查询的arcId')
             const { data: result } = await useAsyncData<RequestBox<SearchValue>>(
                 "account_info",
                 () => $fetch(`botarcapi/user/info`,
@@ -137,7 +137,7 @@ export default class search_Account {
                     }
                 }
             );
-            console.log(result.value.content.songinfo, '查询出来的结果')
+            // console.log(result.value.content.songinfo, '查询出来的结果')
             if (result.value) {
                 try {
                     if (result.value.status === 0) {
