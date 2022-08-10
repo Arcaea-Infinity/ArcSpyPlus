@@ -1,4 +1,3 @@
-import type { Ref } from "vue";
 import { getAccountPPTBorder, getAccountSongLevel, getAccountSongGrade } from "~~/utils/utils";
 
 export type ResultCallBack = (result: SearchValue) => void;
@@ -47,16 +46,40 @@ export interface account_info {
     join_date: number | string;
     character: number;
 }
-
+export interface SongInfo {
+    name_en: string,
+    name_jp: string,
+    artist: string,
+    bpm: string,
+    bpm_base: number,
+    set: string,
+    set_friendly: string,
+    time: number,
+    side: number,
+    world_unlock: boolean,
+    remote_download: boolean,
+    bg: string,
+    date: number,
+    version: string,
+    difficulty: number,
+    rating: number,
+    note: number,
+    chart_designer: string,
+    jacket_designer: string,
+    jacket_override: boolean,
+    audio_override: boolean
+}
 export interface SearchValue {
     account_info: account_info;
     recent_score: RecentScoreType[];
+    songinfo: SongInfo[]
 }
 export interface Bast30 {
     best30_avg: number,
     recent10_avg: number,
     account_info: account_info;
     best30_list: RecentScoreType[];
+    best30_songinfo: SongInfo[];
 }
 
 export default class search_Account {
@@ -108,12 +131,13 @@ export default class search_Account {
                                     character: 0,
                                 },
                                 recent_score: [],
+                                songinfo: []
                             },
                         }
                     }
                 }
             );
-            console.log(result, '查询出来的结果')
+            console.log(result.value.content.songinfo, '查询出来的结果')
             if (result.value) {
                 try {
                     if (result.value.status === 0) {
@@ -135,7 +159,7 @@ export default class search_Account {
                 return
             }
         } catch (error) {
-            console.log(error,"我是错误")
+            console.log(error, "我是错误")
         }
     }
     public async getUserB30() {
@@ -145,7 +169,9 @@ export default class search_Account {
                     {
                         params: {
                             user: this.ArcId.replaceAll(" ", ""),
-                            recent: 7
+                            recent: 7,
+                            overflow: 10,
+                            withsonginfo: true
                         },
                         baseURL: "https://server.awbugl.top/",
                         headers: {
@@ -161,7 +187,7 @@ export default class search_Account {
                 e.songLevel_bg = await getAccountSongLevel(e.score);
                 e.songGrade_bg = await getAccountSongGrade(e.clear_type);
             }
-            return result.value.content.best30_list
+            return { B30: result.value.content.best30_list, B30songInfo: result.value.content.best30_songinfo }
         } catch (error) {
 
         }
@@ -180,6 +206,9 @@ export default class search_Account {
     }
     public getSongList(): SearchValue["recent_score"] {
         return [...this.account_Info.recent_score || []].map(e => { e.theme_color = [255, 255, 255]; return e })
+    }
+    public getSongInfo(): SearchValue["songinfo"] {
+        return [...this.account_Info.songinfo]
     }
     public async destroy(): Promise<void> {
         this.account_Info = null;

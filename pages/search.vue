@@ -4,37 +4,17 @@
             <header class="between align-center userInfo" v-once>
                 <div class="column ">
                     <div class="userName">{{ userDetali?.name }}</div>
-                    <div>
-                        ArcID {{ userDetali?.code }}
-                    </div>
-                    <div>
-                        Join Date {{ new Date(userDetali?.join_date).toLocaleDateString().replaceAll("/", "-") }}
-                    </div>
+                    <div>{{ userDetali?.code.replace(/\s/g, "").replace(/(.{3})/g, "$1 ") }}</div>
                 </div>
-
             </header>
-            <div class="switchType" :class="currentswitch == 0 ? 'switchBtnCurrent-left' : 'switchBtnCurrent-right'">
-                <div class="switchBtn account_info" :class="{ switchBtnCurrent: currentswitch == 0 }"
-                    @click.stop="updateSwitch(0)">RECENT</div>
-                <div class="switchBtn acount_B30" :class="{ switchBtnCurrent: currentswitch == 1 }"
-                    @click.stop="updateSwitch(1)">BEST30</div>
-                <div class="account_PPT">
-                    <img :src="userDetali.rating_bg" alt="PPT图片加载失败" />
-                    <span style="font-size:32px">
-                        {{ insertStr(`${userDetali?.rating}`, 2, ".").slice(0, 2) }}
-                    </span>
-                    <span>
-                        {{ insertStr(`${userDetali?.rating}`, 2, ".").slice(2) }}
-                    </span>
-                </div>
-            </div>
+            <SearchTab :userDetali="userDetali" :left="SongLeft" v-model:current="currentswitch" />
             <div class="song-carousel" :ref="getBoxHeight" :class="{ 'SongList-B30Show': currentswitch == 1 }">
                 <div class="ScrollBox">
                     <ul class="songList">
-                        <li class="song" :class="`song-${isColorDarkOrLight(item.theme_color)}`"
-                            v-for="item in songList" :key="item.time_played">
+                        <li class="song" :id="index === 0 ? 'firstSong' : ''"
+                            :class="`song-${isColorDarkOrLight(item.theme_color)}`" v-for="(item, index) in songList"
+                            :key="item.time_played">
                             <div class="songCard-BgBox">
-
                                 <div class="songCard-bg-shadowBox"
                                     :style="item.theme_color ? `background:rgba(${item.theme_color.join(',')},1)` : ''">
                                 </div>
@@ -43,10 +23,9 @@
                                     <img :src="`https://server.awbugl.top/botarcapi/assets/song?songid=${item.song_id}`"
                                         alt="图片加载失败" />
                                 </div>
-
                             </div>
                             <div class="songCard">
-                                <span class="songId">{{ item.song_id }}</span>
+                                <span class="songId">{{ songInfo[index].name_en }}</span>
                                 <div class="song-Line">
                                     <span>
                                         <span class="song-Line-label">PUREs&nbsp;&nbsp;</span>
@@ -83,7 +62,8 @@
                 <div class="ScrollBox">
 
                     <ul class="songList">
-                        <li class="song" :class="`song-${isColorDarkOrLight(item.theme_color)}`" v-for="item in B30"
+                        <li class="song" :id="index === 0 ? 'firstB30Song' : ''"
+                            :class="`song-${isColorDarkOrLight(item.theme_color)}`" v-for="(item, index) in B30"
                             :key="item.time_played">
                             <div class="songCard-BgBox">
 
@@ -98,7 +78,7 @@
 
                             </div>
                             <div class="songCard">
-                                <span class="songId">{{ item.song_id }}</span>
+                                <span class="songId">{{ B30songInfo[index].name_en }}</span>
                                 <div class="song-Line">
                                     <span>
                                         <span class="song-Line-label">PUREs&nbsp;&nbsp;</span>
@@ -149,33 +129,35 @@ const search = new search_Account(route.query.ArcId as string);
 const currentswitch = ref<number>(0)
 const charBg = ref<string>("https://server.awbugl.top/botarcapi/assets/char?partner=1");
 const SongListHeight = ref<string>("")
-
+const SongLeft = ref<string>("")
 await search.onCreated()
-const B30 = await search.getUserB30();
+const { B30, B30songInfo } = await search.getUserB30();
 const userDetali = search.getAccount_info()
 const songList = search.getSongList();
+const songInfo = search.getSongInfo();
 await search.destroy();
-function getBoxHeight(e: HTMLDivElement) {
-    if (e instanceof HTMLDivElement) {
-        console.dir(e.offsetHeight, '我是div')
-        SongListHeight.value = `${e.offsetHeight}px`
 
+function getBoxHeight(e: HTMLDivElement) {
+    if (e instanceof HTMLDivElement && SongListHeight.value.length <= 0) {
+        SongListHeight.value = `${e.offsetHeight - 16}px`
     }
 }
 async function getBgURL(sum: number, is_char_uncapped: boolean) {
     charBg.value = `https://server.awbugl.top/botarcapi/assets/char?partner=${sum}&awakened=${is_char_uncapped}`;
 }
-function insertStr(soure: string, start: number, newStr: string) {
-    let newSoure = soure.split("").reverse().join("")
-    return `${newSoure.slice(0, start)}${newStr}${newSoure.slice(start)}`.split("").reverse().join("")
-}
-function updateSwitch(e: number) {
-    currentswitch.value = e
+let firstSongDom: HTMLLIElement | null = null
+function preloadXY() {
+    if (!firstSongDom) firstSongDom = document.querySelector<HTMLLIElement>("#firstSong");
+    if (firstSongDom) {
+        SongLeft.value = `${firstSongDom.offsetLeft}px`
+    }
 }
 
 onMounted(() => {
-    // const vConsole = new window.VConsole();
-    // http://localhost:3000/api/assets?songid=worldender
+    if (window) {
+        preloadXY()
+        window.addEventListener("resize", preloadXY)
+    }
     songList.forEach(e => colorfulImg(e.song_id, e))
     B30.forEach(e => colorfulImg(e.song_id, e))
 })
@@ -186,37 +168,6 @@ getBgURL(userDetali.character, userDetali.is_char_uncapped)
 @import url("@/assets/css/song.scss");
 
 
-.switchType {
-    display: flex;
-    justify-content: flex-start;
-    position: relative;
-    padding-left: 16px;
-
-    &::after {
-        content: "";
-        position: absolute;
-        width: 100px;
-        height: 100%;
-        border-radius: 20px 20px 0px 0px;
-        box-shadow: 5px 6px 3px 0 hsl(0deg 0% 57% / 40%);
-        background-color: #FFF;
-        transition: left 0.19s, transform 0.19s;
-    }
-}
-
-.switchBtnCurrent-left {
-    &::after {
-        left: 16px;
-    }
-}
-
-.switchBtnCurrent-right {
-    &::after {
-        // width: 50% !important;
-        left: 136px;
-        // right: 0;
-    }
-}
 
 .ScrollBox {
     flex: 1;
@@ -232,6 +183,10 @@ getBgURL(userDetali.character, userDetali.is_char_uncapped)
 }
 
 @media screen and (max-width: 500px) {
+    .switchType {
+        padding-left: 16px;
+    }
+
     .ScrollBox {
         padding: 0;
     }
@@ -247,6 +202,7 @@ getBgURL(userDetali.character, userDetali.is_char_uncapped)
     }
 
     .songList {
+        row-gap: 0px !important;
         grid-template-columns: 1fr !important;
     }
 }
@@ -255,6 +211,7 @@ getBgURL(userDetali.character, userDetali.is_char_uncapped)
 
     .songList {
         grid-template-columns: 1fr 1fr !important;
+
     }
 }
 
@@ -264,10 +221,12 @@ getBgURL(userDetali.character, userDetali.is_char_uncapped)
     justify-content: center;
     grid-template-columns: repeat(auto-fill, min(350px, 32%));
     column-gap: 16px;
+    row-gap: 16px;
+
 
     .song {
         min-height: 30%;
-        border-radius: 20px;
+        // border-radius: 20px;
         border-bottom: 1px solid #212121;
         // margin-bottom: 12px;
         display: flex;
@@ -320,62 +279,6 @@ getBgURL(userDetali.character, userDetali.is_char_uncapped)
     background-color: rgba(0, 0, 0, 0.21);
     position: relative;
     z-index: 10;
-}
-
-.switchBtn {
-    width: 110px;
-    color: #FFF;
-    border-radius: 20px 20px 0px 0px;
-    background-color: transparent;
-    padding: 7px 20px;
-    font-weight: 600;
-    cursor: pointer;
-    position: relative;
-    z-index: 1;
-}
-
-.switchBtnCurrent {
-    color: #5C5997 !important;
-}
-
-.account_info {
-    margin-right: 12px;
-}
-
-@media screen and (max-width:500px) {
-    .account_PPT {
-        span {
-            -webkit-text-stroke: 1px #42406E;
-        }
-    }
-}
-
-.account_PPT {
-    position: absolute;
-    top: 0;
-    right: 32px;
-    // transform: translateY(30%);
-
-    span {
-        letter-spacing: 2px;
-        position: relative;
-        z-index: 10;
-        color: #fff;
-        font-size: 22px;
-        font-family: "Exo";
-        font-weight: 700;
-    }
-
-    img {
-        position: absolute;
-        z-index: 5;
-        width: min(90px, 20vmin);
-        object-fit: cover;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -45%);
-    }
-
 }
 
 .account-char {
