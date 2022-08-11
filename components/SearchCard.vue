@@ -1,5 +1,6 @@
 <template>
-    <li class="song" :id="first && index === 0 ? 'firstSong' : ''" :class="`song-${isColorDarkOrLight(item.theme_color)}`">
+    <li class="song" :id="first && index === 0 ? 'firstSong' : ''"
+        :class="`song-${isColorDarkOrLight(item.theme_color)}`">
         <div class="songCard-BgBox">
 
             <div class="songCard-bg-shadowBox"
@@ -14,23 +15,23 @@
         <div class="songCard">
             <span class="songId">{{ info.name_en }}</span>
             <div class="song-Line">
-                <span>
+                <span style="min-width:150px">
                     <span class="song-Line-label">PUREs&nbsp;&nbsp;</span>
                     <span class="song-Line-value">
                         {{ item.perfect_count }}
                         ({{ item.shiny_perfect_count }})</span>
                 </span>
-                <span style="margin-left:  auto;margin-right: 30%;">
+                <span style="margin-left:5%;margin-right: 30%;">
                     <span class="song-Line-label">FARs&nbsp;&nbsp;</span>
                     <span class="song-Line-value">{{ item.near_count }}</span>
                 </span>
             </div>
             <div class="song-Line" style="margin-top:20px;margin-bottom: 16px;">
-                <span>
+                <span style="min-width:150px">
                     <span class="song-Line-label">LOSTs&nbsp;&nbsp;</span>
                     <span class="song-Line-value"> {{ item.miss_count }}</span>
                 </span>
-                <span style="margin-left:  auto;margin-right: 30%;">
+                <span style="margin-left:5%;margin-right: 30%;">
                     <span class="song-Line-label">RATING&nbsp;&nbsp;</span>
                     <span class="song-Line-value">{{ item.rating.toFixed(2) }}</span>
                 </span>

@@ -116,7 +116,8 @@ function insertStr(soure: string, start: number, newStr: string) {
     position: absolute;
     top: 0;
     right: 32px;
-    transform: translateY(-50%);
+    transform: translateY(-100%);
+    z-index: 99;
 
     span {
         letter-spacing: 2px;

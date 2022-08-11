@@ -24,13 +24,15 @@ useHead({
   script: [{
     src: "https://unpkg.com/nprogress@0.2.0/nprogress.js",
     defer: "true",
-  }, {
-    src: `https://unpkg.com/vconsole@latest/dist/vconsole.min.js`,
-  }]
+  }
+    // , {
+    //   src: `https://unpkg.com/vconsole@latest/dist/vconsole.min.js`,
+    // }
+  ]
 })
-onMounted(() => {
-  const vconsole = new window.VConsole();
-})
+// onMounted(() => {
+//   const vconsole = new window.VConsole();
+// })
 if (!String.prototype.replaceAll) {
   String.prototype.replaceAll = function (str: any, newStr: any) {
     if (Object.prototype.toString.call(str).toLowerCase() === '[object regexp]') {
