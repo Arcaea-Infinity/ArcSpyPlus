@@ -80,6 +80,8 @@ export interface Bast30 {
     account_info: account_info;
     best30_list: RecentScoreType[];
     best30_songinfo: SongInfo[];
+    best30_overflow: RecentScoreType[];
+    best30_overflow_songinfo: SongInfo[];
 }
 
 export default class search_Account {
@@ -182,12 +184,14 @@ export default class search_Account {
                     lazy: false,
                     server: true,
                 });
-            for (let i = 0; i < result.value.content.best30_list.length; i++) {
-                const e = result.value.content.best30_list[i]
+            console.log(result, '我是B40')
+            const list = [...result.value.content.best30_list, ...result.value.content.best30_overflow]
+            for (let i = 0; i < list.length; i++) {
+                const e = list[i]
                 e.songLevel_bg = await getAccountSongLevel(e.score);
                 e.songGrade_bg = await getAccountSongGrade(e.clear_type);
             }
-            return { B30: result.value.content.best30_list, B30songInfo: result.value.content.best30_songinfo }
+            return { B30: list, B30songInfo: [...result.value.content.best30_songinfo, ...result.value.content.best30_overflow_songinfo] }
         } catch (error) {
 
         }

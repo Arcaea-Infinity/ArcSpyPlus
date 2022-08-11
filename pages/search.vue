@@ -11,105 +11,17 @@
             <div class="song-carousel" :ref="getBoxHeight" :class="{ 'SongList-B30Show': currentswitch == 1 }">
                 <div class="ScrollBox">
                     <ul class="songList">
-                        <li class="song" :id="index === 0 ? 'firstSong' : ''"
-                            :class="`song-${isColorDarkOrLight(item.theme_color)}`" v-for="(item, index) in songList"
-                            :key="item.time_played">
-                            <div class="songCard-BgBox">
-                                <div class="songCard-bg-shadowBox"
-                                    :style="item.theme_color ? `background:rgba(${item.theme_color.join(',')},1)` : ''">
-                                </div>
-                                <div class="songCard-bg-shadowBox-right"
-                                    :style="item.theme_color ? `background:rgba(${item.theme_color.join(',')},1)` : ''">
-                                    <img :src="`https://server.awbugl.top/botarcapi/assets/song?songid=${item.song_id}`"
-                                        alt="图片加载失败" />
-                                </div>
-                            </div>
-                            <div class="songCard">
-                                <span class="songId">{{ songInfo[index].name_en }}</span>
-                                <div class="song-Line">
-                                    <span>
-                                        <span class="song-Line-label">PUREs&nbsp;&nbsp;</span>
-                                        <span class="song-Line-value">
-                                            {{ item.perfect_count }}
-                                            ({{ item.shiny_perfect_count }})</span>
-                                    </span>
-                                    <span style="margin-left:  auto;margin-right:30%;">
-                                        <span class="song-Line-label">FARs&nbsp;&nbsp;</span>
-                                        <span class="song-Line-value">{{ item.near_count }}</span>
-                                    </span>
-                                </div>
-                                <div class="song-Line" style="margin-top:20px;margin-bottom: 16px;">
-                                    <span>
-                                        <span class="song-Line-label">LOSTs&nbsp;&nbsp;</span>
-                                        <span class="song-Line-value"> {{ item.miss_count }}</span>
-                                    </span>
-                                    <span style="margin-left:  auto;margin-right:30%;">
-                                        <span class="song-Line-label">RATING&nbsp;&nbsp;</span>
-                                        <span class="song-Line-value">{{ item.rating.toFixed(2) }}</span>
-                                    </span>
-                                </div>
-                                <div class="song-footer">
-                                    <span class="song-score">{{ item.score }}</span>
-                                    <img class="song-score-png"
-                                        :class="{ 'song-score-png-ex': item.songLevel_bg.indexOf('ex+') === -1 && item.songLevel_bg.indexOf('ex') !== -1 }"
-                                        :src="item.songLevel_bg" alt="" />
-                                    <img class="song-png" :src="item.songGrade_bg" alt="" />
-                                </div>
-                            </div>
-                        </li>
+                        <SongCardVue first v-for="(item, index) in songList" :index="index" :key="item.time_played"
+                            :item="item" :info="songInfo[index]">
+                        </SongCardVue>
+
                     </ul>
                 </div>
                 <div class="ScrollBox">
-
                     <ul class="songList">
-                        <li class="song" :id="index === 0 ? 'firstB30Song' : ''"
-                            :class="`song-${isColorDarkOrLight(item.theme_color)}`" v-for="(item, index) in B30"
-                            :key="item.time_played">
-                            <div class="songCard-BgBox">
-
-                                <div class="songCard-bg-shadowBox"
-                                    :style="item.theme_color ? `background:rgba(${item.theme_color.join(',')},1)` : ''">
-                                </div>
-                                <div class="songCard-bg-shadowBox-right"
-                                    :style="item.theme_color ? `background:rgba(${item.theme_color.join(',')},1)` : ''">
-                                    <img :src="`https://server.awbugl.top/botarcapi/assets/song?songid=${item.song_id}`"
-                                        alt="图片加载失败" />
-                                </div>
-
-                            </div>
-                            <div class="songCard">
-                                <span class="songId">{{ B30songInfo[index].name_en }}</span>
-                                <div class="song-Line">
-                                    <span>
-                                        <span class="song-Line-label">PUREs&nbsp;&nbsp;</span>
-                                        <span class="song-Line-value">
-                                            {{ item.perfect_count }}
-                                            ({{ item.shiny_perfect_count }})</span>
-                                    </span>
-                                    <span style="margin-left:  auto;margin-right: 30%;">
-                                        <span class="song-Line-label">FARs&nbsp;&nbsp;</span>
-                                        <span class="song-Line-value">{{ item.near_count }}</span>
-                                    </span>
-                                </div>
-                                <div class="song-Line" style="margin-top:20px;margin-bottom: 16px;">
-                                    <span>
-                                        <span class="song-Line-label">LOSTs&nbsp;&nbsp;</span>
-                                        <span class="song-Line-value"> {{ item.miss_count }}</span>
-                                    </span>
-                                    <span style="margin-left:  auto;margin-right: 30%;">
-                                        <span class="song-Line-label">RATING&nbsp;&nbsp;</span>
-                                        <span class="song-Line-value">{{ item.rating.toFixed(2) }}</span>
-                                    </span>
-                                </div>
-                                <div class="song-footer">
-                                    <span class="song-score">{{ item.score }}</span>
-                                    <img class="song-score-png"
-                                        :class="{ 'song-score-png-ex': item.songLevel_bg.indexOf('ex+') === -1 && item.songLevel_bg.indexOf('ex') !== -1 }"
-                                        :src="item.songLevel_bg" alt="" />
-                                    <img class="song-png" :src="item.songGrade_bg" alt="" />
-                                </div>
-                            </div>
-                        </li>
+                        <SongCardVue v-for="(item, index) in B30" :key="item.time_played" :item="item"
+                            :info="B30songInfo[index]">
+                        </SongCardVue>
                     </ul>
                 </div>
 
@@ -122,8 +34,9 @@
 </template>
 
 <script lang="ts" setup>
-import search_Account, { RecentScoreType } from "~~/composables/search";
-import { colorfulImg, isColorDarkOrLight } from "../utils/utils";
+import search_Account from "@/composables/search";
+import { colorfulImg } from "@/utils/utils";
+import SongCardVue from "@/components/SearchCard.vue"
 const route = useRoute();
 const search = new search_Account(route.query.ArcId as string);
 const currentswitch = ref<number>(0)

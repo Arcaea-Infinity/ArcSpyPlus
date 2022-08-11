@@ -8,7 +8,7 @@
             <div class="switchBtn acount_B30" :class="{ switchBtnCurrent: current == 1 }" @click.stop="updateSwitch(1)">
                 BEST40</div>
         </div>
-        <div class="account_PPT">
+        <div class="account_PPT" :style="`right:${left}`">
             <img :src="userDetali.rating_bg" alt="PPT图片加载失败" />
             <span style="font-size:32px">
                 {{ insertStr(`${userDetali?.rating}`, 2, ".").slice(0, 2) }}

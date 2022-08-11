@@ -1,11 +1,5 @@
 import type { RecentScoreType, RGB } from "~~/composables/search";
 export async function colorfulImg(img: string | HTMLImageElement, item: RecentScoreType) {
-    // console.log(item, '歌曲')
-    // const str = await $fetch("/api/assets", {
-    //     params: {
-    //         songid: img
-    //     }
-    // })
     return new Promise((resolve, reject) => {
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d"); // 构建canvas
@@ -71,6 +65,7 @@ export function rgbToHsl(rgb: RGB = [255, 255, 255]) {
  * 判断颜色属于深色还是浅色
  */
 export function isColorDarkOrLight(rgbStr: RGB) {
+    if (!rgbStr) return;
     let [h, s, l] = rgbToHsl(rgbStr);
     return (l > 0.5) ? 'light' : 'dark';
 }
