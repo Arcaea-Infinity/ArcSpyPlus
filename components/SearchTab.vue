@@ -8,7 +8,7 @@
             <div class="switchBtn acount_B30" :class="{ switchBtnCurrent: current == 1 }" @click.stop="updateSwitch(1)">
                 BEST40</div>
         </div>
-        <div class="account_PPT" :style="`right:${left}`">
+        <div class="account_PPT" :style="`right:max(8px,${left})`">
             <img :src="userDetali.rating_bg" alt="PPT图片加载失败" />
             <span style="font-size:32px">
                 {{ insertStr(`${userDetali?.rating}`, 2, ".").slice(0, 2) }}
@@ -103,7 +103,10 @@ function insertStr(soure: string, start: number, newStr: string) {
 
 @media screen and (max-width:500px) {
     .account_PPT {
+        transform: translateY(0%) !important;
+
         span {
+
             -webkit-text-stroke: 1px #42406E;
         }
     }
@@ -113,7 +116,7 @@ function insertStr(soure: string, start: number, newStr: string) {
     position: absolute;
     top: 0;
     right: 32px;
-    // transform: translateY(30%);
+    transform: translateY(-50%);
 
     span {
         letter-spacing: 2px;

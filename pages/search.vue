@@ -1,20 +1,20 @@
 <template>
     <NuxtLayout name="page">
         <main class="searchMask column">
+
             <header class="between align-center userInfo" v-once>
-                <div class="column ">
+                <div class="column">
                     <div class="userName">{{ userDetali?.name }}</div>
                     <div>{{ userDetali?.code.replace(/\s/g, "").replace(/(.{3})/g, "$1 ") }}</div>
                 </div>
             </header>
             <SearchTab :userDetali="userDetali" :left="SongLeft" v-model:current="currentswitch" />
-            <div class="song-carousel" :ref="getBoxHeight" :class="{ 'SongList-B30Show': currentswitch == 1 }">
+            <div class="song-carousel" ref="carouselBox" :class="{ 'SongList-B30Show': currentswitch == 1 }">
                 <div class="ScrollBox">
                     <ul class="songList">
                         <SongCardVue first v-for="(item, index) in songList" :index="index" :key="item.time_played"
                             :item="item" :info="songInfo[index]">
                         </SongCardVue>
-
                     </ul>
                 </div>
                 <div class="ScrollBox">
@@ -42,7 +42,8 @@ const search = new search_Account(route.query.ArcId as string);
 const currentswitch = ref<number>(0)
 const charBg = ref<string>("https://server.awbugl.top/botarcapi/assets/char?partner=1");
 const SongListHeight = ref<string>("")
-const SongLeft = ref<string>("")
+const SongLeft = ref<string>("");
+const carouselBox = ref<HTMLDivElement>()
 await search.onCreated()
 const { B30, B30songInfo } = await search.getUserB30();
 const userDetali = search.getAccount_info()
@@ -52,7 +53,9 @@ await search.destroy();
 
 function getBoxHeight(e: HTMLDivElement) {
     if (e instanceof HTMLDivElement && SongListHeight.value.length <= 0) {
-        SongListHeight.value = `${e.offsetHeight - 16}px`
+        nextTick(() => {
+            SongListHeight.value = `${e.offsetHeight - 16}px`
+        })
     }
 }
 async function getBgURL(sum: number, is_char_uncapped: boolean) {
@@ -65,8 +68,10 @@ function preloadXY() {
         SongLeft.value = `${firstSongDom.offsetLeft}px`
     }
 }
-
 onMounted(() => {
+    if (carouselBox.value) {
+        getBoxHeight(carouselBox.value)
+    }
     if (window) {
         preloadXY()
         window.addEventListener("resize", preloadXY)

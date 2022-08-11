@@ -28,6 +28,9 @@ useHead({
     src: `https://unpkg.com/vconsole@latest/dist/vconsole.min.js`,
   }]
 })
+onMounted(() => {
+  const vconsole = new window.VConsole();
+})
 if (!String.prototype.replaceAll) {
   String.prototype.replaceAll = function (str: any, newStr: any) {
     if (Object.prototype.toString.call(str).toLowerCase() === '[object regexp]') {
