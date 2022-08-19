@@ -139,7 +139,7 @@ export default class search_Account {
                     }
                 }
             );
-            // console.log(result.value.content.songinfo, '查询出来的结果')
+            console.log(result.value.content.account_info, '查询出来的结果')
             if (result.value) {
                 try {
                     if (result.value.status === 0) {

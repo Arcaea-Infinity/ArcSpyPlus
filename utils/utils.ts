@@ -132,3 +132,81 @@ export async function getAccountSongGrade(num: number): Promise<string> {
         }
     }
 }
+const charLocation = new Map<string, [string, string]>()
+charLocation.set("1", ["-73px", "-11px"]); // 对立
+charLocation.set("1u", ["-73px", "-9px"]);
+charLocation.set("2", ["-73px", "-62px"]); // 红
+charLocation.set("2u", ["-73px", "-90px"]);
+charLocation.set("3", ["-20px", "-86px"]); // dy联动角色
+charLocation.set("4", ["-47px", " -37px"]); // 忘却
+charLocation.set("4u", ["-152px", "-111px"]);
+charLocation.set("5", ["-12px", "-180px"]); // 光 & 对立
+charLocation.set("5u", ["-12px", "-180px"]); // 觉醒  光 & 对立 无变化
+charLocation.set("6", ["-50px", "-46px"]); // 花对立
+charLocation.set("7", ["-75px", "-126px"]); // 伞对立 无觉醒
+charLocation.set("8", ["-76px", "-43px"]); // 夜莺吹雪联动角色 无觉醒
+charLocation.set("9", ["-58px", "-97px"]); // lanota 联动角色 无觉醒
+charLocation.set("10", ["-18px", "-50px"]); // 伊莉丝 无觉醒 
+charLocation.set("11", ["-38px", "-90px"]); // 双子爱托 白 
+charLocation.set("11u", ["-48px", "-185px"]);
+charLocation.set("12", ["-81px", "-98px"]); // 双子 露娜 紫
+charLocation.set("12u", ["-72px", "-166px"]);
+charLocation.set("13", ["-24px", "-55px"]); // 调 红色吉他
+charLocation.set("13u", ["-102px", "-45px"]);
+charLocation.set("14", ["-25px", "-122px"]); // 零光 无觉醒
+charLocation.set("15", ["-68px", "-37px"]); // 骨折光 无觉醒
+charLocation.set("16", ["18px", "-112px"]); // 夏日限定光 无觉醒
+charLocation.set("17", ["-35px", "-84px"]); // 夏日限定对立 无觉醒
+charLocation.set("18", ["-98px", "-122px"]); //  联动手冲对立 无觉醒
+charLocation.set("19", ["-16px", "-93px"]); // 彩梦
+charLocation.set("19u", ["-60px", "-120px"]);
+charLocation.set("20", ["-36px ", "-86px"]); // 冬日限定 爱托 & 露娜
+charLocation.set("21", ["-29px", "-66px"]); // 语音角色柚梅
+charLocation.set("21u", ["-33px", "-67px"]);
+charLocation.set("22", ["-69px ", "-49px"]); // 光 & 赛依娜 联动（衔尾蛇） 无觉醒
+charLocation.set("23", ["0px", "-70px"]); // 咲弥 无觉醒
+charLocation.set("24", ["-211px", "-144px"]); // 对立 & 中二企鹅 无觉醒
+charLocation.set("25", ["-70px ", "-133px"]); // 中二企鹅 无觉醒
+charLocation.set("26", ["-39px", "-78px"]);  // 中二  秦名
+charLocation.set("26u", ["-86px", "-102px"]);
+charLocation.set("27", ["-34px", "-119px"]); // 中二 诺诺
+charLocation.set("27u", ["-44px", "-119px"]);
+charLocation.set("28", ["40%", "-157px"]); // 中二 潘多拉涅墨西斯
+charLocation.set("28u", ["-179px", "-147px"]);
+charLocation.set("29", ["-67px", "-97px"]);  // 中二 轩辕十四
+charLocation.set("29u", ["-69px ", "-93px"]);
+charLocation.set("30", ["40px", "-139px"]); // 群愿 无觉醒
+charLocation.set("31", ["12px ", "-75px"]); // 专辑 光 无觉醒
+charLocation.set("32", ["-42px", "-69px"]); // 专辑 对立 无觉醒
+charLocation.set("33", ["-48px", "-125px"]);  // 兮娅 无觉醒
+charLocation.set("34", ["-43px", "-85px"]);  // DORO*C 血魔王 无觉醒
+charLocation.set("35", ["-111px", "-163px"]); // 风暴对立 无觉醒
+charLocation.set("36", ["-97px", "-160px"]);  // 布利兰特
+charLocation.set("36u", ["-104px ", "-155px"]);
+charLocation.set("37", ["-100px", "-49px"]);  // 夏日限定 伊莉丝
+charLocation.set("38", ["-131px", "-47px"]);  // 专辑 咲弥
+charLocation.set("39", ["-136px", "-158px"]);   // 爱丽丝 & 丹尼尔
+charLocation.set("40", ["-97px", "-160px"]); // 露娜 & 音击 联动角色
+charLocation.set("41", ["-97px", "-160px"]); // 联动 climax 阿莱乌斯 角色
+charLocation.set("42", ["-100px ", "-60px"]);  // 希尔
+charLocation.set("42u", ["-128px ", "-154px"]);
+charLocation.set("43", ["-85px ", "-50px"]);  // 伊莎贝尔
+charLocation.set("43u", ["-92px  ", "-95px"]);
+charLocation.set("44", ["-12px  ", "-51px"]); //  迷尔
+charLocation.set("45", ["-189px", "-73px"]);  // 拉格兰
+charLocation.set("46", ["-79px ", "-71px"]);  // 凛可 语音角色
+charLocation.set("47", ["-23px  ", "-99px"]); // 奈美
+charLocation.set("48", ["-61px ", "-72px "]);  // 咲弥 & 伊丽莎白 联动
+charLocation.set("49", ["-47px  ", "-88px"]);  //  莉莉
+charLocation.set("50", ["-137px", "-60px"]);  // 夏日限定 群愿
+charLocation.set("51", ["-94px", "-62px"]);   // 爱丽丝 & 坦尼尔
+charLocation.set("52", ["-60px ", "-88px"]);  // 对立（Elegy）
+charLocation.set("53", ["-12px ", "-57px"]);  // 玛莉嘉
+charLocation.set("54", ["-50px", " -117px"]); // 维塔
+charLocation.set("55", ["-111px", "-179px"]); // 杀对立的光光
+export function getAccountFaceLocation(account: string, u: boolean) {
+    const key = `${account}${u ? "u" : ""}`
+    if (charLocation.has(key)) {
+        return charLocation.get(key)
+    }
+}

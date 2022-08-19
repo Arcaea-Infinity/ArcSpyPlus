@@ -27,7 +27,7 @@
 
             </div>
         </main>
-        <aside class="account-char" :style="{ backgroundImage: `url(${charBg})` }">
+        <aside class="account-char" :style="{ backgroundImage: `url(${charBg})`, backgroundPosition: charBgLocation }">
         </aside>
 
     </NuxtLayout>
@@ -35,12 +35,13 @@
 
 <script lang="ts" setup>
 import search_Account from "@/composables/search";
-import { colorfulImg } from "@/utils/utils";
+import { colorfulImg, getAccountFaceLocation } from "@/utils/utils";
 import SongCardVue from "@/components/SearchCard.vue"
 const route = useRoute();
 const search = new search_Account(route.query.ArcId as string);
 const currentswitch = ref<number>(0)
 const charBg = ref<string>("https://server.awbugl.top/botarcapi/assets/char?partner=1");
+const charBgLocation = ref<string>("-73px -152px");
 const SongListHeight = ref<string>("")
 const SongLeft = ref<string>("");
 const carouselBox = ref<HTMLDivElement>()
@@ -60,6 +61,7 @@ function getBoxHeight(e: HTMLDivElement) {
 }
 async function getBgURL(sum: number, is_char_uncapped: boolean) {
     charBg.value = `https://server.awbugl.top/botarcapi/assets/char?partner=${sum}&awakened=${is_char_uncapped}`;
+    charBgLocation.value = getAccountFaceLocation(`${sum}`, is_char_uncapped).join(" ")
 }
 let firstSongDom: HTMLLIElement | null = null
 function preloadXY() {
@@ -203,7 +205,6 @@ getBgURL(userDetali.character, userDetali.is_char_uncapped)
     position: absolute;
     z-index: 3;
     background-size: cover;
-    background-position: -73px -152px;
     background-repeat: no-repeat;
     width: 100%;
     height: 100%;
