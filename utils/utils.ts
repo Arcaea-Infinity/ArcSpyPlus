@@ -12,8 +12,9 @@ export async function colorfulImg(img: string | HTMLImageElement, item: RecentSc
             canvas.height = newImg.height; //canvas压缩大小到1px
             ctx.drawImage(newImg, 0, 0); // 图片绘制到canvas
             const data = ctx.getImageData(0, 0, 1, 1).data; // 获取原始canvas像素数据
-            item.theme_color = [data[0], data[1], data[2]] // 结束
 
+
+            item.theme_color = [data[0], data[1], data[2]] // 结束
             resolve({
                 r: data[0],
                 g: data[1],
@@ -22,7 +23,7 @@ export async function colorfulImg(img: string | HTMLImageElement, item: RecentSc
             newImg.removeEventListener("load", load)
         }
         function error(_?: Event) {
-            // console.log("错误")
+            console.log("错误", newImg.src)
             if (newImg.src.indexOf(".jpg") !== -1) {
                 newImg.src = `${window.origin}/api/assets?songid=${img}&difficulty=${item.difficulty}`
             }
@@ -34,6 +35,55 @@ export async function colorfulImg(img: string | HTMLImageElement, item: RecentSc
         }
     })
 }
+
+export function colorfulImg_two(img: string, item: RecentScoreType) {
+    return new Promise((resolve, reject) => {
+        const newImg = new Image();
+        let canvas = document.createElement('canvas'),
+            context = canvas.getContext && canvas.getContext('2d'),
+            height: number, width: number, length: number, data: Uint8ClampedArray,
+            i = -4,
+            blockSize = 5,
+            count = 0,
+            rgb = { r: 0, g: 0, b: 0 }
+
+
+        function load(_?: Event) {
+            canvas.width = newImg.width;
+            canvas.height = newImg.height; //canvas压缩大小到1px
+            context.drawImage(newImg, 0, 0); // 图片绘制到canvas
+
+            data = context.getImageData(0, 0, newImg.width, newImg.height).data
+            length = data.length
+            while ((i += blockSize * 4) < length) {
+                ++count;
+                rgb.r += data[i];
+                rgb.g += data[i + 1];
+                rgb.b += data[i + 2];
+            }
+            rgb.r = ~~(rgb.r / count);
+            rgb.g = ~~(rgb.g / count);
+            rgb.b = ~~(rgb.b / count);
+            item.theme_color = [rgb.r, rgb.g, rgb.b] // 结束
+            resolve(rgb)
+            newImg.removeEventListener("load", load)
+        }
+        function error(_?: Event) {
+            if (newImg.src.indexOf(".jpg") !== -1) {
+                newImg.src = `${window.origin}/api/assets?songid=${img}&difficulty=${item.difficulty}`
+            }
+        }
+        newImg.addEventListener("load", load);
+        newImg.addEventListener("error", error);
+        if (typeof img === "string") {
+            newImg.src = `${window.origin}/${img}_${item.difficulty}.jpg`
+        }
+
+    })
+}
+
+
+
 
 /*
  * rgb value to hsl 色相(H)、饱和度(S)、明度(L)
@@ -60,6 +110,20 @@ export function rgbToHsl(rgb: RGB = [255, 255, 255]) {
     }
     return [h, s, l];
 }
+export function darkenColor(rgb: RGB = [255, 255, 255]) {
+    const hsl = rgbToHsl(rgb);
+    hsl[0] = `${(hsl[0] * 360).toFixed(2)}deg`;
+    hsl[1] = `${(hsl[1] * 100).toFixed(2)}%`;
+    hsl[2] = `${((hsl[2] * 100) + 8).toFixed(2)}%`;
+    console.log(hsl.join(" "))
+    return hsl.join(" ")
+}
+
+
+/*
+ * 判断颜色属于深色还是浅色
+ */
+
 
 /*
  * 判断颜色属于深色还是浅色
@@ -69,6 +133,7 @@ export function isColorDarkOrLight(rgbStr: RGB) {
     let [h, s, l] = rgbToHsl(rgbStr);
     return (l > 0.5) ? 'light' : 'dark';
 }
+
 
 
 

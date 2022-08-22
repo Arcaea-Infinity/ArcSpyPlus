@@ -2,11 +2,13 @@
 
   <Head>
     <Link rel="shortcut icon" href="/favicon.ico" />
+    <Link href="https://unpkg.com/nprogress@0.2.0/nprogress.css" />
     <Title>ArcSpy+</Title>
     <Meta charset="UTF-8" />
-    <Meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <Meta http-equiv="x-ua-compatible" content="IE=edge" />
     <Meta name="viewport" content="width=device-width,user-scalable=no, initial-scale=1.0, maximum-scale=1.0" />
     <Meta name="description" content="Arcaea查分站点" />
+    <Script src="https://unpkg.com/nprogress@0.2.0/nprogress.js" defer> </Script>
   </Head>
   <NuxtPage></NuxtPage>
 </template>
@@ -15,24 +17,9 @@
 useHead({
   htmlAttrs: {
     lang: "zh-cn"
-  },
-  link: [
-    {
-      href: "https://unpkg.com/nprogress@0.2.0/nprogress.css"
-    }
-  ],
-  script: [{
-    src: "https://unpkg.com/nprogress@0.2.0/nprogress.js",
-    defer: "true",
   }
-    // , {
-    //   src: `https://unpkg.com/vconsole@latest/dist/vconsole.min.js`,
-    // }
-  ]
 })
-// onMounted(() => {
-//   const vconsole = new window.VConsole();
-// })
+
 if (!String.prototype.replaceAll) {
   String.prototype.replaceAll = function (str: any, newStr: any) {
     if (Object.prototype.toString.call(str).toLowerCase() === '[object regexp]') {
@@ -44,5 +31,5 @@ if (!String.prototype.replaceAll) {
 </script>
 <style>
 @import url("./assets/css/base.css");
-@import url("nprogress/nprogress.css");
+/* @import url("nprogress/nprogress.css"); */
 </style>

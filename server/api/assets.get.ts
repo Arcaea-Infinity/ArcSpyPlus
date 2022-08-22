@@ -4,8 +4,9 @@ import image from "images"
 export default defineEventHandler(async (event) => {
     const cookies = useCookies(event);
     const { songid, difficulty } = useQuery(event);
+
     if (songid && typeof songid === "string") {
-        const path = process.cwd().replaceAll("/server", "/public").replaceAll(`\\ArcSpyPlus`, `\\ArcSpyPlus\\public`)
+        const path = process.cwd().replaceAll("/server", "/public").replaceAll(`\\ArcSpyPlus`, `\\ArcSpyPlus\\public`);
         let sign = path.indexOf("/") !== -1 ? "/" : "\\"
         try {
             const fileTry = [
@@ -29,7 +30,7 @@ export default defineEventHandler(async (event) => {
                 }
             }
         } catch (error) {
-            // console.log(error, '查询文件错误')
+            console.log(error, '查询文件错误')
         }
         // console.log(`https://server.awbugl.top/botarcapi/assets/song?songid=${songid}`)
     }

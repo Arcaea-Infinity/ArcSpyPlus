@@ -1,27 +1,28 @@
 <template>
     <NuxtLayout name="page">
         <main class="searchMask column">
-
             <header class="between align-center userInfo" v-once>
                 <div class="column">
                     <div class="userName">{{ userDetali?.name }}</div>
-                    <div>{{ userDetali?.code.replace(/\s/g, "").replace(/(.{3})/g, "$1 ") }}</div>
+                    <div class="userId">{{ userDetali?.code.replace(/\s/g, "").replace(/(.{3})/g, "$1 ") }}</div>
                 </div>
             </header>
             <SearchTab :userDetali="userDetali" :left="SongLeft" v-model:current="currentswitch" />
             <div class="song-carousel" ref="carouselBox" :class="{ 'SongList-B30Show': currentswitch == 1 }">
                 <div class="ScrollBox">
                     <ul class="songList">
-                        <SongCardVue first v-for="(item, index) in songList" :index="index" :key="item.time_played"
-                            :item="item" :info="songInfo[index]">
-                        </SongCardVue>
+                        <SearchSongCardVue :loadTheme="loadThemeColor" first v-for="(item, index) in songList"
+                            :index="index" :key="item.time_played" :item="item" :info="songInfo[index]">
+                        </SearchSongCardVue>
+
                     </ul>
                 </div>
                 <div class="ScrollBox">
                     <ul class="songList">
-                        <SongCardVue v-for="(item, index) in B30" :key="item.time_played" :item="item"
-                            :info="B30songInfo[index]">
-                        </SongCardVue>
+                        <SearchSongCardVue :loadTheme="loadThemeColor" v-for="(item, index) in B30"
+                            :key="item.time_played" :index="index" :item="item" :info="B30songInfo[index]">
+                        </SearchSongCardVue>
+
                     </ul>
                 </div>
 
@@ -35,8 +36,11 @@
 
 <script lang="ts" setup>
 import search_Account from "@/composables/search";
-import { colorfulImg, getAccountFaceLocation } from "@/utils/utils";
-import SongCardVue from "@/components/SearchCard.vue"
+import { colorfulImg, colorfulImg_two, getAccountFaceLocation } from "@/utils/utils";
+
+import SearchSongCardVue from "../components/SearchSongCard.vue";
+import { nextTick } from "vue"
+const loadThemeColor = ref<boolean>(false)
 const route = useRoute();
 const search = new search_Account(route.query.ArcId as string);
 const currentswitch = ref<number>(0)
@@ -70,25 +74,30 @@ function preloadXY() {
         SongLeft.value = `${firstSongDom.offsetLeft}px`
     }
 }
-onMounted(() => {
+onMounted(async () => {
     if (carouselBox.value) {
         getBoxHeight(carouselBox.value)
     }
     if (window) {
-        preloadXY()
+        setTimeout(() => {
+            preloadXY()
+        })
         window.addEventListener("resize", preloadXY)
     }
-    songList.forEach(e => colorfulImg(e.song_id, e))
-    B30.forEach(e => colorfulImg(e.song_id, e))
+    for (let i = 0; i < songList.length; i++) {
+        const e = songList[i];
+        await colorfulImg_two(e.song_id, e)
+    }
+    for (let i = 0; i < B30.length; i++) {
+        const e = B30[i];
+        await colorfulImg_two(e.song_id, e)
+    }
+    loadThemeColor.value = true
 })
 getBgURL(userDetali.character, userDetali.is_char_uncapped)
 
 </script>
 <style lang="scss" scoped>
-@import url("@/assets/css/song.scss");
-
-
-
 .ScrollBox {
     flex: 1;
     overflow-y: auto;
@@ -191,6 +200,10 @@ getBgURL(userDetali.character, userDetali.is_char_uncapped)
     .userName {
         font-weight: 600;
         font-size: min(55px, 8vmin);
+    }
+
+    .userId {
+        font-family: "Exo";
     }
 }
 

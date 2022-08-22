@@ -11,6 +11,7 @@ import type { Ref } from 'vue';
 const msg = ref<string>("亲亲,你输入的ArcId或者名称我们查询不到记录捏")
 const error: Ref<any> = useError();
 if (error.value) {
+    console.log(error.value.url.toLowerCase, '错误的url')
     const message: string = error.value.url.toLowerCase()
     if (message.indexOf("arcaea") !== -1) {
         msg.value = "亲亲,请不要查官方Id,因为根本查不到的捏"
@@ -29,6 +30,7 @@ function ReturnHomo() {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
     // background-image: url("@/assets/img/Error_bg.jpg") ;
     // background-repeat: no-repeat;
     // background-size: auto 100%;
@@ -50,7 +52,7 @@ function ReturnHomo() {
     }
 
     img {
-        margin: 40px 0 ;
+        margin: 40px 0;
         // max-width: 100vw;
         max-width: 500px;
         height: 50vh;

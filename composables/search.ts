@@ -109,7 +109,7 @@ export default class search_Account {
                         },
                         baseURL: "https://server.awbugl.top/",
                         headers: {
-                            "user-agent": "ArcSpy3S2D2G1L2JB2F0"
+                            Authorization: "Bearer 00040060b6a8b848da82bda706367f2443be5a6e"
                         }
                     }),
                 {
@@ -139,7 +139,7 @@ export default class search_Account {
                     }
                 }
             );
-            console.log(result.value.content.account_info, '查询出来的结果')
+            // console.log(result.value.content.account_info, '查询出来的结果')
             if (result.value) {
                 try {
                     if (result.value.status === 0) {
@@ -177,14 +177,14 @@ export default class search_Account {
                         },
                         baseURL: "https://server.awbugl.top/",
                         headers: {
-                            "user-agent": "ArcSpy3S2D2G1L2JB2F0"
+                            Authorization: "Bearer 00040060b6a8b848da82bda706367f2443be5a6e"
                         }
                     }),
                 {
                     lazy: false,
                     server: true,
                 });
-            console.log(result, '我是B40')
+            // console.log(result, '我是B40')
             const list = [...result.value.content.best30_list, ...result.value.content.best30_overflow]
             for (let i = 0; i < list.length; i++) {
                 const e = list[i]
