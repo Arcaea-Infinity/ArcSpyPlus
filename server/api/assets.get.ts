@@ -32,7 +32,6 @@ export default defineEventHandler(async (event) => {
         } catch (error) {
             console.log(error, '查询文件错误')
         }
-        // console.log(`https://server.awbugl.top/botarcapi/assets/song?songid=${songid}`)
     }
 
 })

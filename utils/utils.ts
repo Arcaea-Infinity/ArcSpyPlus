@@ -23,7 +23,6 @@ export async function colorfulImg(img: string | HTMLImageElement, item: RecentSc
             newImg.removeEventListener("load", load)
         }
         function error(_?: Event) {
-            console.log("错误", newImg.src)
             if (newImg.src.indexOf(".jpg") !== -1) {
                 newImg.src = `${window.origin}/api/assets?songid=${img}&difficulty=${item.difficulty}`
             }
@@ -89,7 +88,6 @@ export function colorfulImg_two(img: string, item: RecentScoreType) {
  * rgb value to hsl 色相(H)、饱和度(S)、明度(L)
  */
 export function rgbToHsl(rgb: RGB = [255, 255, 255]) {
-    // console.log(rgb, '我是rgb')
 
     let [r, g, b] = rgb;
     r /= 255, g /= 255, b /= 255;
@@ -115,7 +113,6 @@ export function darkenColor(rgb: RGB = [255, 255, 255]) {
     hsl[0] = `${(hsl[0] * 360).toFixed(2)}deg`;
     hsl[1] = `${(hsl[1] * 100).toFixed(2)}%`;
     hsl[2] = `${((hsl[2] * 100) + 8).toFixed(2)}%`;
-    console.log(hsl.join(" "))
     return hsl.join(" ")
 }
 

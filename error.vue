@@ -11,7 +11,6 @@ import type { Ref } from 'vue';
 const msg = ref<string>("亲亲,你输入的ArcId或者名称我们查询不到记录捏")
 const error: Ref<any> = useError();
 if (error.value) {
-    console.log(error.value.url.toLowerCase, '错误的url')
     const message: string = error.value.url.toLowerCase()
     if (message.indexOf("arcaea") !== -1) {
         msg.value = "亲亲,请不要查官方Id,因为根本查不到的捏"

@@ -91,7 +91,6 @@ function StartTouch(e: TouchEvent) {
 }
 function pointRating(rating: string) {
     const arr = rating.split("").reverse();
-    console.log(arr)
     arr[0] = "." + arr[0]
     return arr.reverse().join("")
 }
