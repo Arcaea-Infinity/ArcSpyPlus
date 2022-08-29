@@ -1,6 +1,7 @@
 import { Blob } from "buffer";
 import fs from "fs"
 import image from "images"
+import { getAssets } from "~~/env.local";
 export default defineEventHandler(async (event) => {
     const cookies = useCookies(event);
     const { songid, difficulty } = useQuery(event);
@@ -17,7 +18,7 @@ export default defineEventHandler(async (event) => {
                 return buffer
             } else {
                 // console.log("文件不存在")
-                const png: Blob = await $fetch(`https://server.awbugl.top/botarcapi/assets/song?songid=${songid}&difficulty=${difficulty}`);
+                const png: Blob = await $fetch(getAssets(songid, difficulty));
                 let type = png.type === "image/jpeg" ? "jpg" : "png"
                 try {
                     const buffer = Buffer.from(await png.arrayBuffer())

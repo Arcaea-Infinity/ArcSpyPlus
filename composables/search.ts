@@ -1,3 +1,4 @@
+import { BaseURL, Authorization } from "~~/env.local";
 import { getAccountPPTBorder, getAccountSongLevel, getAccountSongGrade } from "~~/utils/utils";
 
 export type ResultCallBack = (result: SearchValue) => void;
@@ -106,9 +107,9 @@ export default class search_Account {
                             recent: 7,
                             withsonginfo: true
                         },
-                        baseURL: "https://server.awbugl.top/",
+                        baseURL: BaseURL,
                         headers: {
-                            Authorization: "Bearer 00040060b6a8b848da82bda706367f2443be5a6e"
+                            Authorization
                         }
                     }),
                 {
@@ -173,9 +174,9 @@ export default class search_Account {
                             overflow: 10,
                             withsonginfo: true
                         },
-                        baseURL: "https://server.awbugl.top/",
+                        baseURL: BaseURL,
                         headers: {
-                            Authorization: "Bearer 00040060b6a8b848da82bda706367f2443be5a6e"
+                            Authorization
                         }
                     }),
                 {

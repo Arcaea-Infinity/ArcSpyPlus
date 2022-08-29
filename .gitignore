@@ -1,6 +1,6 @@
 node_modules
 *.log*
-*.local.*
+*.local.ts
 .nuxt
 .nitro
 .cache
