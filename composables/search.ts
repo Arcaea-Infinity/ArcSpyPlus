@@ -75,6 +75,7 @@ export interface SearchValue {
     recent_score: RecentScoreType[];
     songinfo: SongInfo[]
 }
+// B30的数据结构
 export interface Bast30 {
     best30_avg: number,
     recent10_avg: number,
@@ -86,16 +87,16 @@ export interface Bast30 {
 }
 
 export default class search_Account {
-    private account_Info: SearchValue;
-    private searchResultBack = new Map<RequestBox["status"], ResultCallBack>();
-    private ArcId: string = "";
-    private Status: "success" | "failed" | "padding" = "padding"
+    private account_Info: SearchValue; // 用户Info
+    private searchResultBack = new Map<RequestBox["status"], ResultCallBack>(); // 回调的Map
+    private ArcId: string = ""; // 存储查询的用户ID
+    private Status: "success" | "failed" | "padding" = "padding"; // 写了但是派不上用处的Status
     constructor(ArcId: string) {
         this.searchResultBack.set(-3, this.AccountStatus_notFound);
         this.searchResultBack.set(0, this.AccountStatus_success);
         this.ArcId = ArcId
     }
-
+    // 查询近期游玩记录
     public async onCreated(): Promise<void> {
         try {
             const { data: result } = await useAsyncData<RequestBox<SearchValue>>(
@@ -115,28 +116,6 @@ export default class search_Account {
                 {
                     lazy: false,
                     server: true,
-                    default: () => {
-                        return {
-                            status: -3,
-                            message: "我是默认返回",
-                            content: {
-                                account_info: {
-                                    code: "1919",
-                                    name: "查询失败",
-                                    user_id: 114514,
-                                    is_mutual: false,
-                                    is_char_uncapped_override: false,
-                                    is_char_uncapped: false,
-                                    is_skill_sealed: false,
-                                    rating: 616,
-                                    join_date: new Date().toLocaleString().replaceAll("/", "-"),
-                                    character: 0,
-                                },
-                                recent_score: [],
-                                songinfo: []
-                            },
-                        }
-                    }
                 }
             );
             if (result.value) {
@@ -163,6 +142,7 @@ export default class search_Account {
             console.log(error, "我是错误")
         }
     }
+    // B30查询 
     public async getUserB30() {
         try {
             const { data: result } = await useAsyncData<RequestBox<Bast30>>("account_best30",
