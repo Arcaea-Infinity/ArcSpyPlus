@@ -76,7 +76,7 @@ export interface SearchValue {
     songinfo: SongInfo[]
 }
 // B30的数据结构
-export interface Bast30 {
+export interface Best30 {
     best30_avg: number,
     recent10_avg: number,
     account_info: account_info;
@@ -145,7 +145,7 @@ export default class search_Account {
     // B30查询 
     public async getUserB30() {
         try {
-            const { data: result } = await useAsyncData<RequestBox<Bast30>>("account_best30",
+            const { data: result } = await useAsyncData<RequestBox<Best30>>("account_best30",
                 () => $fetch(`botarcapi/user/best30`,
                     {
                         params: {
