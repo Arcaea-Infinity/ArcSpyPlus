@@ -23,14 +23,14 @@ export async function colorfulImg(img: string | HTMLImageElement, item: RecentSc
             newImg.removeEventListener("load", load)
         }
         function error(_?: Event) {
-            if (newImg.src.indexOf(".jpg") !== -1) {
+            if (newImg.src.indexOf(".jpg") !== -1) { // 访问本地缓存接口触发 server/api/assets
                 newImg.src = `${window.origin}/api/assets?songid=${img}&difficulty=${item.difficulty}`
             }
         }
-        newImg.addEventListener("load", load);
-        newImg.addEventListener("error", error);
+        newImg.addEventListener("load", load); // 注册加载事件
+        newImg.addEventListener("error", error);// 注册Error事件
         if (typeof img === "string") {
-            newImg.src = `${window.origin}/${img}_${item.difficulty}.jpg`
+            newImg.src = `${window.origin}/${img}_${item.difficulty}.jpg` // 访问本地jpg文件如果不存在则触发Error
         }
     })
 }
